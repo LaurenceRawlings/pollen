@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
@@ -13,9 +14,12 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.adapter.MainTabAdapter
+import com.laurencerawlings.pollen.ui.account.AccountActivity
+import com.laurencerawlings.pollen.ui.bookmarks.BookmarksActivity
 import io.reactivex.plugins.RxJavaPlugins
 
 
@@ -32,7 +36,9 @@ class MainActivity : AppCompatActivity() {
         .setPhoneButtonId(R.id.phone_button)
         .build()
 
-    private val RC_SIGN_IN = 1
+    private enum class RC(val code: Int) {
+        SIGN_IN(1)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,15 +58,7 @@ class MainActivity : AppCompatActivity() {
         val scrollToTop: FloatingActionButton = findViewById(R.id.scroll_to_top)
 
         scrollToTop.setOnClickListener { top ->
-            startActivityForResult(
-                AuthUI.getInstance()
-                    .createSignInIntentBuilder()
-                    .setAvailableProviders(providers)
-                    .setTheme(R.style.AppTheme_NoActionBar)
-                    .setAuthMethodPickerLayout(customLayout)
-                    .build(),
-                RC_SIGN_IN
-            )
+
         }
 
         RxJavaPlugins.setErrorHandler(Throwable::printStackTrace)
@@ -69,13 +67,15 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == RC.SIGN_IN.code) {
             val response = IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_OK) {
-                val user = FirebaseAuth.getInstance().currentUser
-
+                val myToast = Toast.makeText(applicationContext,"Logged in!", Toast.LENGTH_SHORT)
+                myToast.show()
             } else {
+                val myToast = Toast.makeText(applicationContext,"Log in failed!", Toast.LENGTH_SHORT)
+                myToast.show()
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
@@ -91,14 +91,43 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.app_bar_search -> {
+            R.id.app_bar_account -> {
+                account()
             }
             R.id.app_bar_bookmarks -> {
-            }
-            R.id.app_bar_settings -> {
+                bookmarks()
             }
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun account() {
+        // FirebaseAuth.getInstance().currentUser
+        if (Firebase.auth.currentUser != null) {
+            startActivity(Intent(this, AccountActivity::class.java))
+        } else {
+            signIn()
+        }
+    }
+
+    private fun bookmarks() {
+        if (Firebase.auth.currentUser != null) {
+            startActivity(Intent(this, BookmarksActivity::class.java))
+        } else {
+            signIn()
+        }
+    }
+
+    private fun signIn() {
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .setTheme(R.style.AppTheme_NoActionBar)
+                .setAuthMethodPickerLayout(customLayout)
+                .build(),
+            RC.SIGN_IN.code
+        )
     }
 }

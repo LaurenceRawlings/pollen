@@ -15,7 +15,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_main.*
 
 
-class MainFragment() : Fragment() {
+class MainFragment : Fragment() {
 
     private lateinit var mainViewModel: MainViewModel
     private lateinit var articleAdapter: ArticleRecyclerAdapter

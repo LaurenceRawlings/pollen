@@ -10,4 +10,6 @@
     <string name="article_placeholder_source_icon">SOURCE ICON</string>
     <string name="article_placeholder_bookmark">BOOKMARK</string>
     <string name="article_placeholder_share">SHARE</string>
+    <string name="title_activity_account">Account Settings</string>
+    <string name="title_activity_bookmarks">Bookmarks</string>
 </resources>
