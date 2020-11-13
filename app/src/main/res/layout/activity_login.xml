@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@drawable/login_background">
+    <!--    tools:context=".ui.login.LoginActivity"-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/materialCardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:letterSpacing="0.2"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:orientation="vertical">
+
+            <com.firebase.ui.auth.util.ui.SupportVectorDrawablesButton
+                android:id="@+id/email_button"
+                style="@style/FirebaseUI.Button.AccountChooser.EmailButton"
+                android:text="@string/fui_sign_in_with_email"
+                tools:ignore="UnusedIds" />
+
+            <com.firebase.ui.auth.util.ui.SupportVectorDrawablesButton
+                android:id="@+id/google_button"
+                style="@style/FirebaseUI.Button.AccountChooser.GoogleButton"
+                android:text="@string/fui_sign_in_with_google" />
+
+            <com.firebase.ui.auth.util.ui.SupportVectorDrawablesButton
+                android:id="@+id/phone_button"
+                style="@style/FirebaseUI.Button.AccountChooser.PhoneButton"
+                android:text="@string/fui_sign_in_with_phone"
+                tools:ignore="UnusedIds" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <TextView
+        android:id="@+id/main_tos_and_pp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:layout_margin="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="By continuing you are indicating that you accept our Terms of Service and Privacy Policy" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

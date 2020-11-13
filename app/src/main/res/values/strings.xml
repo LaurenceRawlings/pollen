@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Pollen</string>
     <string name="tab_text_1">For You</string>
     <string name="tab_text_2">Headlines</string>

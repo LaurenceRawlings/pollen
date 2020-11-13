@@ -1,4 +1,4 @@
-package com.laurencerawlings.pollen.viewmodel
+package com.laurencerawlings.pollen.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

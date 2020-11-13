@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "207293579782",
+    "firebase_url": "https://pollennews.firebaseio.com",
+    "project_id": "pollennews",
+    "storage_bucket": "pollennews.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207293579782:android:b2fe80abb619184b707987",
+        "android_client_info": {
+          "package_name": "com.laurencerawlings.pollen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "207293579782-reb04biakkd3j1es96tm3jh2pu6gtg6q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.laurencerawlings.pollen",
+            "certificate_hash": "b134782e4d6c68187b39d9668da32e396cf1e04d"
+          }
+        },
+        {
+          "client_id": "207293579782-n1arbke5g8tejlguvn9vvjfhqt95945j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAt1ZYp4FCO8oQUgZIePSJmfAzy6mSUd3U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "207293579782-n1arbke5g8tejlguvn9vvjfhqt95945j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

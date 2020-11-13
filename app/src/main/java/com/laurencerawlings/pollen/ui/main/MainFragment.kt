@@ -1,4 +1,4 @@
-package com.laurencerawlings.pollen.fragment
+package com.laurencerawlings.pollen.ui.main
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.adapter.ArticleRecyclerAdapter
-import com.laurencerawlings.pollen.viewmodel.MainViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_main.*
