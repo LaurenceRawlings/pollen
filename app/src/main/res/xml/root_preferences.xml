@@ -2,11 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory app:title="News Categories">
-
-
         <MultiSelectListPreference
-            android:entries="@array/reply_entries"
-            android:entryValues="@array/reply_values"
+            android:entries="@array/category_entries"
+            android:entryValues="@array/category_values"
             android:key="categories"
             android:title="Categories" />
     </PreferenceCategory>

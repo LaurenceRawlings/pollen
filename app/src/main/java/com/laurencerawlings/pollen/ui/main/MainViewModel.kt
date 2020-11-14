@@ -27,7 +27,7 @@ class MainViewModel : ViewModel() {
     }
 
     private fun getPersonalNews(): Single<ArticlesDto> {
-        return newsApiRepository.getEverything(q = "bitcoin", sources = "bbc-news", domains = null, language = Language.EN, sortBy = SortBy.POPULARITY, pageSize = 20, page = 1)
+        return newsApiRepository.getEverything(q = "kardashian", sources = "bbc-news", domains = null, language = Language.EN, sortBy = SortBy.POPULARITY, pageSize = 20, page = 1)
     }
 
     private fun getHeadlines(): Single<ArticlesDto> {

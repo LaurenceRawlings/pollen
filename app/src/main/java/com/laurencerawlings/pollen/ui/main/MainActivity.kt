@@ -18,10 +18,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.adapter.MainTabAdapter
+import com.laurencerawlings.pollen.model.User
 import com.laurencerawlings.pollen.ui.account.AccountActivity
 import com.laurencerawlings.pollen.ui.bookmarks.BookmarksActivity
 import io.reactivex.plugins.RxJavaPlugins
-
 
 class MainActivity : AppCompatActivity() {
     private val providers = arrayListOf(
@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         val viewPager: ViewPager = findViewById(R.id.view_pager)
         viewPager.adapter = sectionsPagerAdapter
         viewPager.offscreenPageLimit = 2
+        viewPager.currentItem = 1
         val tabs: TabLayout = findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
 
@@ -61,6 +62,8 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        updateUser()
+
         RxJavaPlugins.setErrorHandler(Throwable::printStackTrace)
     }
 
@@ -73,6 +76,7 @@ class MainActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 val myToast = Toast.makeText(applicationContext,"Logged in!", Toast.LENGTH_SHORT)
                 myToast.show()
+                updateUser()
             } else {
                 val myToast = Toast.makeText(applicationContext,"Log in failed!", Toast.LENGTH_SHORT)
                 myToast.show()
@@ -80,6 +84,7 @@ class MainActivity : AppCompatActivity() {
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
                 // ...
+                User.user = null
             }
         }
     }
@@ -102,8 +107,13 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun updateUser() {
+        if (Firebase.auth.currentUser != null) {
+            User.user = User(Firebase.auth.currentUser!!.uid, Firebase.auth.currentUser!!.displayName)
+        }
+    }
+
     private fun account() {
-        // FirebaseAuth.getInstance().currentUser
         if (Firebase.auth.currentUser != null) {
             startActivity(Intent(this, AccountActivity::class.java))
         } else {

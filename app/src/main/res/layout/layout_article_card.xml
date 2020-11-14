@@ -80,13 +80,13 @@
                     android:layout_height="wrap_content"
                     android:text="@string/article_placeholder_details" />
 
-                <ImageView
+                <CheckBox
+                    android:id="@+id/bookmark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    app:srcCompat="@drawable/ic_baseline_add_24"
-                    android:contentDescription="@string/article_placeholder_bookmark" />
+                    android:button="@drawable/bookmark"
+                    android:layout_marginEnd="-20dp"
+                    android:layout_marginStart="10dp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"

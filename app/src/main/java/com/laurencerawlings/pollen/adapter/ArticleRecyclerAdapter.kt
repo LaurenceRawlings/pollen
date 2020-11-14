@@ -1,22 +1,21 @@
 package com.laurencerawlings.pollen.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dfl.newsapi.model.ArticleDto
 import com.laurencerawlings.pollen.R
+import com.laurencerawlings.pollen.model.User
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.layout_article_card.view.*
-import java.lang.Math.abs
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.math.roundToInt
 
 class ArticleRecyclerAdapter(articles: List<ArticleDto>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -50,6 +49,7 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) : RecyclerView.Adapter<
         private val source: TextView = itemView.article_source
         private val headline = itemView.article_headline
         private val details = itemView.article_details
+        private val bookmarked = itemView.bookmark
 
         fun bind(article: ArticleDto) {
             source.text = article.source.name ?: "Source Unknown"
@@ -59,13 +59,23 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) : RecyclerView.Adapter<
             Picasso.get().load("http://" + URL(article.url).host + "/favicon.ico").into(sourceIcon)
 
             val hours = hoursPassed(article.publishedAt).toString()
-            var read = "1"
 
-            if (article.description != null) {
-                read = readTime(article.description).toString()
+            details.text = "${hours}h ago"
+
+            setBookmarked(article, bookmarked)
+
+            bookmarked.setOnCheckedChangeListener { _, isChecked ->
+                if (User.user != null) {
+                    if (isChecked) {
+                        User.user!!.addBookmark(article)
+                    } else {
+                        User.user!!.removeBookmark(article)
+                    }
+                } else {
+                    // TODO: Login
+                }
+
             }
-
-            details.text = hours + "h ago" + " • " + read + "m read"
         }
 
         private fun stringToDate(date: String): Date? {
@@ -85,19 +95,14 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) : RecyclerView.Adapter<
             return TimeUnit.HOURS.convert(diffInMS, TimeUnit.MILLISECONDS).toInt()
         }
 
-        private fun readTime(content: String): Int {
-            if (content.isBlank()) {
-                return 1
-            }
-
-            val words = content.trim()
-            val numberOfWords = words.split("\\s+".toRegex()).size
-            val time = (numberOfWords.div(200f)).roundToInt()
-
-            return if (time < 1) {
-                1
+        fun setBookmarked(article: ArticleDto, checkBox: CheckBox) {
+            if (User.user != null) {
+                val bookmarkRef = User.user!!.getBookmarks().document(User.articleKey(article))
+                bookmarkRef.get().addOnSuccessListener {
+                    checkBox.isChecked = it.exists()
+                }
             } else {
-                time
+                checkBox.isChecked = false
             }
         }
     }

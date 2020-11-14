@@ -5,7 +5,7 @@
     <string name="tab_text_3">All</string>
     <string name="article_placeholder_source">source</string>
     <string name="article_placeholder_headline">Headline</string>
-    <string name="article_placeholder_details">1h ago • 1 minute read</string>
+    <string name="article_placeholder_details">1h ago</string>
     <string name="article_placeholder_thumbnail">ARTICLE THUMBNAIL</string>
     <string name="article_placeholder_source_icon">SOURCE ICON</string>
     <string name="article_placeholder_bookmark">BOOKMARK</string>
