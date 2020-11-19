@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         AuthUI.IdpConfig.GoogleBuilder().build()
     )
 
-    var customLayout: AuthMethodPickerLayout = AuthMethodPickerLayout.Builder(R.layout.activity_login)
+    private var customLayout: AuthMethodPickerLayout = AuthMethodPickerLayout.Builder(R.layout.activity_login)
         .setGoogleButtonId(R.id.google_button)
         .setEmailButtonId(R.id.email_button)
         .setPhoneButtonId(R.id.phone_button)
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        updateUser()
+        User.updateUser()
 
         RxJavaPlugins.setErrorHandler(Throwable::printStackTrace)
     }
@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 val myToast = Toast.makeText(applicationContext,"Logged in!", Toast.LENGTH_SHORT)
                 myToast.show()
-                updateUser()
+                User.updateUser()
             } else {
                 val myToast = Toast.makeText(applicationContext,"Log in failed!", Toast.LENGTH_SHORT)
                 myToast.show()
@@ -105,12 +105,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun updateUser() {
-        if (Firebase.auth.currentUser != null) {
-            User.user = User(Firebase.auth.currentUser!!.uid, Firebase.auth.currentUser!!.displayName)
-        }
     }
 
     private fun account() {

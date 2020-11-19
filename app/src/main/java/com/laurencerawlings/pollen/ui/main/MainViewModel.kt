@@ -1,5 +1,7 @@
 package com.laurencerawlings.pollen.ui.main
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dfl.newsapi.NewsApiRepository
@@ -8,7 +10,9 @@ import com.dfl.newsapi.enums.Country
 import com.dfl.newsapi.enums.Language
 import com.dfl.newsapi.enums.SortBy
 import com.dfl.newsapi.model.ArticlesDto
+import com.laurencerawlings.pollen.model.User
 import io.reactivex.Single
+import java.net.URLEncoder
 
 class MainViewModel : ViewModel() {
     private val _index = MutableLiveData<Int>()
@@ -26,15 +30,24 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    @SuppressLint("CheckResult")
     private fun getPersonalNews(): Single<ArticlesDto> {
-        return newsApiRepository.getEverything(q = "kardashian", sources = "bbc-news", domains = null, language = Language.EN, sortBy = SortBy.POPULARITY, pageSize = 20, page = 1)
+        var topics = ""
+
+        User.user?.topicsObservable?.subscribe {
+            topics = it.joinToString(" OR ")
+        }
+
+        Log.i("TOPICS", topics)
+
+        return newsApiRepository.getEverything(q = topics, language = Language.EN, sortBy = SortBy.PUBLISHED_AT, pageSize = 100, page = 1)
     }
 
     private fun getHeadlines(): Single<ArticlesDto> {
-        return newsApiRepository.getTopHeadlines(category = Category.GENERAL, country = Country.GB, pageSize = 20, page = 1)
+        return newsApiRepository.getTopHeadlines(category = Category.GENERAL, country = Country.GB, pageSize = 100, page = 1)
     }
 
     private fun getAllNews(): Single<ArticlesDto> {
-        return newsApiRepository.getEverything(q = "bitcoin", sources = "bbc-news", domains = null, language = Language.EN, sortBy = SortBy.POPULARITY, pageSize = 20, page = 1)
+        return newsApiRepository.getEverything(sources = "bbc-news", language = Language.EN, sortBy = SortBy.PUBLISHED_AT, pageSize = 100, page = 1)
     }
 }

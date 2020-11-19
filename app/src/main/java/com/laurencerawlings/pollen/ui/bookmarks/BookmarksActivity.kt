@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dfl.newsapi.model.ArticleDto
 import com.dfl.newsapi.model.SourceDto
+import com.google.firebase.firestore.Query
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.adapter.ArticleRecyclerAdapter
 import com.laurencerawlings.pollen.model.User
@@ -13,7 +14,6 @@ import kotlinx.android.synthetic.main.activity_bookmarks.*
 
 class BookmarksActivity : AppCompatActivity() {
     private lateinit var articleAdapter: ArticleRecyclerAdapter
-    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +25,7 @@ class BookmarksActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        User.user?.getBookmarks()?.get()?.addOnSuccessListener { bookmarks ->
+        User.user?.getBookmarks()?.orderBy("publishedAt", Query.Direction.DESCENDING)?.get()?.addOnSuccessListener { bookmarks ->
             this.runOnUiThread {
                 val bookmarkList = ArrayList<ArticleDto>()
 
