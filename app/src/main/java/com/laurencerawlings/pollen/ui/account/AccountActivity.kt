@@ -1,7 +1,9 @@
 package com.laurencerawlings.pollen.ui.account
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
@@ -24,7 +26,7 @@ class AccountActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.settings, SettingsFragment())
             .commit()
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         val layoutManager = FlexboxLayoutManager(this)
         layoutManager.flexDirection = FlexDirection.ROW
@@ -34,6 +36,13 @@ class AccountActivity : AppCompatActivity() {
         User.user?.topicsObservable?.subscribe {
             updateTopics(it)
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        User.user?.setSources(arrayOf("bbc-news"))
+        User.user?.setCountry("GB")
+        User.user?.setLanguage("EN")
     }
 
     private fun updateTopics(topicList: ArrayList<String>) {

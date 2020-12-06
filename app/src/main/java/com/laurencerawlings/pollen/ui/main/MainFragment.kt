@@ -37,17 +37,13 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recycler_view.layoutManager = LinearLayoutManager(activity)
-    }
 
-    @SuppressLint("CheckResult")
-    override fun onResume() {
-        super.onResume()
+        recycler_view.layoutManager = LinearLayoutManager(activity)
+
         compositeDisposable.add(
             mainViewModel.articles().subscribeOn(Schedulers.io()).subscribe { articles ->
                 activity?.runOnUiThread {
                     articleAdapter = ArticleRecyclerAdapter(articles.articles)
-                    articleAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
                     recycler_view.adapter = articleAdapter
                 }
             })
