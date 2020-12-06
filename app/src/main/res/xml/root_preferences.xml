@@ -1,12 +1,33 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="News Categories">
+    <PreferenceCategory app:title="Localisation">
+
+        <ListPreference
+            app:defaultValue="GB"
+            app:entries="@array/countries"
+            app:entryValues="@array/countries"
+            app:key="country"
+            app:title="Country"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="EN"
+            app:entries="@array/languages"
+            app:entryValues="@array/languages"
+            app:key="language"
+            app:title="Language"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="News">
+
         <MultiSelectListPreference
-            android:entries="@array/category_entries"
-            android:entryValues="@array/category_values"
-            android:key="categories"
-            android:title="Categories" />
+            app:defaultValue="@array/countries"
+            app:entries="@array/countries"
+            app:entryValues="@array/countries"
+            app:key="sources"
+            app:title="Sources" />
     </PreferenceCategory>
 
 </PreferenceScreen>

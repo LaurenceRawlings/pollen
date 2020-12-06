@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.adapter.ArticleRecyclerAdapter
 import io.reactivex.disposables.CompositeDisposable
@@ -46,6 +47,7 @@ class MainFragment : Fragment() {
             mainViewModel.articles().subscribeOn(Schedulers.io()).subscribe { articles ->
                 activity?.runOnUiThread {
                     articleAdapter = ArticleRecyclerAdapter(articles.articles)
+                    articleAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
                     recycler_view.adapter = articleAdapter
                 }
             })

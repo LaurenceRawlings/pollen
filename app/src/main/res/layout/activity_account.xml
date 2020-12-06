@@ -1,36 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context=".ui.account.AccountActivity">
 
-<!--    <FrameLayout-->
-<!--        android:id="@+id/settings"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <FrameLayout
+        android:id="@+id/settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </FrameLayout>
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="For You News Topics"
-        app:layout_constraintBottom_toTopOf="@+id/topics"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="16dp"
-        android:theme="@style/FirebaseUI.Text.Heading"/>
+        android:layout_marginStart="70dp"
+        android:textSize="16sp"
+        android:text="Topics" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginEnd="16dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/topic_input"
@@ -45,12 +39,12 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/topic_add"
-            android:layout_width="wrap_content"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            app:icon="@drawable/ic_baseline_add_24"
             android:onClick="addTopic"
-            android:text="Add"/>
+            android:textSize="12sp"
+            android:text="+"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -58,25 +52,24 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/topics"
         android:layout_width="match_parent"
-        android:layout_height="500dp" />
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_height="200dp"
+        android:layout_marginStart="70dp"
+        android:background="@drawable/topic_background"
+        android:layout_marginEnd="16dp" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="16dp">
 
         <Button
             style="@style/FirebaseUI.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="logout"
-            android:layout_marginEnd="50dp"
+            android:layout_marginEnd="16dp"
             android:text="Log Out" />
 
         <Button

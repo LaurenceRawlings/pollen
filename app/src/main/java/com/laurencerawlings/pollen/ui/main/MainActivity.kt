@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
@@ -22,6 +23,8 @@ import com.laurencerawlings.pollen.model.User
 import com.laurencerawlings.pollen.ui.account.AccountActivity
 import com.laurencerawlings.pollen.ui.bookmarks.BookmarksActivity
 import io.reactivex.plugins.RxJavaPlugins
+import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_main.view.*
 
 class MainActivity : AppCompatActivity() {
     private val providers = arrayListOf(
@@ -55,12 +58,6 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        val scrollToTop: FloatingActionButton = findViewById(R.id.scroll_to_top)
-
-        scrollToTop.setOnClickListener { top ->
-
-        }
 
         User.updateUser()
 

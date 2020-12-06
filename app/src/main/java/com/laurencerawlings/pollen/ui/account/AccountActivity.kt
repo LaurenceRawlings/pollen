@@ -8,11 +8,10 @@ import androidx.preference.PreferenceFragmentCompat
 import com.firebase.ui.auth.AuthUI
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
-import com.google.android.flexbox.JustifyContent
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.adapter.TopicRecyclerAdapter
 import com.laurencerawlings.pollen.model.User
-import kotlinx.android.synthetic.main.settings_activity.*
+import kotlinx.android.synthetic.main.activity_account.*
 
 class AccountActivity : AppCompatActivity() {
     private lateinit var topicAdapter: TopicRecyclerAdapter
@@ -20,11 +19,11 @@ class AccountActivity : AppCompatActivity() {
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.settings_activity)
-//        supportFragmentManager
-//            .beginTransaction()
-//            .replace(R.id.settings, SettingsFragment())
-//            .commit()
+        setContentView(R.layout.activity_account)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.settings, SettingsFragment())
+            .commit()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val layoutManager = FlexboxLayoutManager(this)
@@ -58,14 +57,14 @@ class AccountActivity : AppCompatActivity() {
             }
     }
 
+    fun addTopic(view: View) {
+        User.user?.addTopic(topic_input.text.toString())
+        topic_input.text?.clear()
+    }
+
     class SettingsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
         }
-    }
-
-    fun addTopic(view: View) {
-        User.user?.addTopic(topic_input.text.toString())
-        topic_input.text?.clear()
     }
 }

@@ -13,6 +13,17 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
+        <activity
+            android:name=".ui.article.ArticleActivity"
+            android:label="@string/title_activity_article"
+            android:parentActivityName=".ui.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.main.MainActivity" />
+        </activity>
+        <activity
             android:name=".ui.bookmarks.BookmarksActivity"
             android:label="@string/title_activity_bookmarks"
             android:parentActivityName=".ui.main.MainActivity">

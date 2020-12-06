@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/article_card"
     android:layout_width="match_parent"
     android:layout_height="300dp"
     app:cardCornerRadius="10dp"
@@ -91,6 +92,7 @@
                     android:layout_gravity="center"/>
 
                 <ImageView
+                    android:id="@+id/share_article"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_baseline_share_24"

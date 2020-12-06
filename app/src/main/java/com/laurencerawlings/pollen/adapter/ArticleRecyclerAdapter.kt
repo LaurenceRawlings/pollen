@@ -1,24 +1,27 @@
 package com.laurencerawlings.pollen.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.dfl.newsapi.model.ArticleDto
-import com.firebase.ui.auth.AuthUI
 import com.google.android.material.snackbar.Snackbar
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.model.User
+import com.laurencerawlings.pollen.ui.article.ArticleActivity
+import com.laurencerawlings.pollen.ui.bookmarks.BookmarksActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.layout_article_card.view.*
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.coroutines.coroutineContext
+
 
 class ArticleRecyclerAdapter(articles: List<ArticleDto>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -53,6 +56,8 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) : RecyclerView.Adapter<
         private val headline = itemView.article_headline
         private val details = itemView.article_details
         private val bookmarked = itemView.bookmark
+        private val share = itemView.share_article
+        private val card = itemView.article_card
 
         fun bind(article: ArticleDto) {
             source.text = article.source.name
@@ -79,10 +84,30 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) : RecyclerView.Adapter<
                         User.user!!.removeBookmark(article)
                     }
                 } else {
-                    Snackbar.make(it, "You must be signed in to bookmark articles...", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        it,
+                        "You must be signed in to bookmark articles...",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                     bookmarked.isChecked = false
                 }
 
+            }
+
+            share.setOnClickListener {
+                val sendIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, article.url)
+                    type = "text/plain"
+                }
+
+                val shareIntent = Intent.createChooser(sendIntent, null)
+                it.context.startActivity(shareIntent)
+            }
+
+            card.setOnClickListener {
+                ArticleActivity.article = article
+                it.context.startActivity(Intent(it.context, ArticleActivity::class.java))
             }
         }
 

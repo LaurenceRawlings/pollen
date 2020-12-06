@@ -44,7 +44,7 @@ class MainViewModel : ViewModel() {
     }
 
     private fun getHeadlines(): Single<ArticlesDto> {
-        return newsApiRepository.getTopHeadlines(category = Category.GENERAL, country = Country.GB, pageSize = 100, page = 1)
+        return newsApiRepository.getTopHeadlines(country = Country.GB, pageSize = 100, page = 1)
     }
 
     private fun getAllNews(): Single<ArticlesDto> {
