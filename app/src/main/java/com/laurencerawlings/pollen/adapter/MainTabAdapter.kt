@@ -7,21 +7,21 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.ui.main.MainFragment
 
-private val TAB_TITLES = arrayOf(
-    R.string.tab_text_2,
-    R.string.tab_text_1,
-    R.string.tab_text_3
-)
-
 class MainTabAdapter(private val context: Context, fm: FragmentManager)
     : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+
+    private val tabTitles = arrayOf(
+        R.string.tab_text_2,
+        R.string.tab_text_1,
+        R.string.tab_text_3
+    )
 
     override fun getItem(position: Int): Fragment {
         return MainFragment.newInstance(position)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return context.resources.getString(TAB_TITLES[position])
+        return context.resources.getString(tabTitles[position])
     }
 
     override fun getCount(): Int {

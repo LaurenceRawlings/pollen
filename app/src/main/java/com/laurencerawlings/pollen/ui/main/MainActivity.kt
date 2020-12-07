@@ -6,7 +6,6 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -26,7 +25,7 @@ import com.laurencerawlings.pollen.adapter.MainTabAdapter
 import com.laurencerawlings.pollen.model.User
 import com.laurencerawlings.pollen.ui.account.AccountActivity
 import com.laurencerawlings.pollen.ui.bookmarks.BookmarksActivity
-import com.laurencerawlings.pollen.ui.notification.NewsNotification
+import com.laurencerawlings.pollen.receivers.NewsNotification
 import io.reactivex.plugins.RxJavaPlugins
 
 

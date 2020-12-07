@@ -1,6 +1,5 @@
 package com.laurencerawlings.pollen.ui.main
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.adapter.ArticleRecyclerAdapter
 import com.laurencerawlings.pollen.model.User
@@ -44,16 +42,32 @@ class MainFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.i("POLLEN-UP", mainViewModel.isUpdated().toString())
         if (!mainViewModel.isUpdated()) {
-            compositeDisposable.add(
-                mainViewModel.articles().subscribeOn(Schedulers.io()).subscribe { articles ->
-                    activity?.runOnUiThread {
-                        articleAdapter = ArticleRecyclerAdapter(articles.articles)
-                        recycler_view.adapter = articleAdapter
-                    }
-                })
+            if (arguments?.getInt(ARG_TAB_NUMBER) == 1) {
+                val topics = User.user?.topics
+                if (topics.isNullOrEmpty()) {
+                    topics_error.visibility = View.VISIBLE
+                    recycler_view.visibility = View.GONE
+                } else {
+                    topics_error.visibility = View.GONE
+                    recycler_view.visibility = View.VISIBLE
+                    update()
+                }
+            } else {
+                update()
+            }
+
         }
+    }
+
+    private fun update() {
+        compositeDisposable.add(
+            mainViewModel.articles().subscribeOn(Schedulers.io()).subscribe { articles ->
+                activity?.runOnUiThread {
+                    articleAdapter = ArticleRecyclerAdapter(articles.articles)
+                    recycler_view.adapter = articleAdapter
+                }
+        })
     }
 
     companion object {

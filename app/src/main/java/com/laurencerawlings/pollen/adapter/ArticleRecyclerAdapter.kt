@@ -7,17 +7,16 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.dfl.newsapi.model.ArticleDto
 import com.google.android.material.snackbar.Snackbar
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.model.User
 import com.laurencerawlings.pollen.ui.article.ArticleActivity
-import com.laurencerawlings.pollen.ui.bookmarks.BookmarksActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.layout_article_card.view.*
 import java.net.URL
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -63,15 +62,21 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) : RecyclerView.Adapter<
             source.text = article.source.name
             headline.text = article.title
 
-            Picasso.get().load(article.urlToImage).into(thumbnail)
+            Picasso.get().load(article.urlToImage).fit().centerCrop().into(thumbnail)
             Picasso.get().load("http://" + URL(article.url).host + "/favicon.ico").into(sourceIcon)
 
             val hours = hoursPassed(article.publishedAt)
 
-            if (hours < 1) {
-                details.text = "now"
-            } else {
-                details.text = "${hours}h ago"
+            when {
+                hours < 1 -> {
+                    details.text = "now"
+                }
+                hours >= 24 -> {
+                    details.text = "${hours/24}d ago"
+                }
+                else -> {
+                    details.text = "${hours}h ago"
+                }
             }
 
             setBookmarked(article, bookmarked)
@@ -112,15 +117,25 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) : RecyclerView.Adapter<
         }
 
         private fun stringToDate(date: String): Date? {
-            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ROOT)
-            return sdf.parse(date)
+            var sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ROOT)
+            return try {
+                sdf.parse(date)
+            } catch (_: ParseException) {
+                try {
+                    sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.ms'Z'", Locale.ROOT)
+                    sdf.parse(date)
+                } catch (_: ParseException) {
+                    try {
+                        sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ROOT)
+                        sdf.parse(date.split('+')[0])
+                    } catch (_: ParseException) {
+                        null
+                    }
+                }
+            }
         }
 
         private fun hoursPassed(date: String): Int {
-            val tz = TimeZone.getTimeZone("UTC")
-            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ROOT)
-
-            sdf.timeZone = tz
             val now = Date()
             val then = stringToDate(date)
 

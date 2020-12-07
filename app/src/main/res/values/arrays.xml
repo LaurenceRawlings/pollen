@@ -72,6 +72,20 @@
         <item>UD</item>
         <item>ZH</item>
     </string-array>
+
+    <string-array name="notificationIntervals">
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>12 hours</item>
+        <item>24 hours</item>
+    </string-array>
+
+    <string-array name="notificationIntervalValues">
+        <item>3</item>
+        <item>6</item>
+        <item>12</item>
+        <item>24</item>
+    </string-array>
 </resources>
 
 

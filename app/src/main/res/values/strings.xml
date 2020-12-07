@@ -13,4 +13,5 @@
     <string name="title_activity_account">Account Settings</string>
     <string name="title_activity_bookmarks">Bookmarks</string>
     <string name="title_activity_article">Article</string>
+    <string name="title_activity_topics">News Topics</string>
 </resources>

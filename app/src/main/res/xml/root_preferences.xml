@@ -1,6 +1,5 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory app:title="Localisation">
 
         <ListPreference
@@ -21,19 +20,34 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="News">
-
+    <PreferenceCategory app:title="Notifications">
         <SwitchPreference
             app:defaultValue="true"
-            app:title="Notifications"
+            app:title="Receive Notifications"
             app:key="notifications"/>
 
+        <ListPreference
+            app:defaultValue="6"
+            android:title="Alert Interval"
+            app:key="notification-interval"
+            android:entryValues="@array/notificationIntervalValues"
+            android:entries="@array/notificationIntervals"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="News">
         <MultiSelectListPreference
-            app:defaultValue="@array/countries"
-            app:entries="@array/countries"
-            app:entryValues="@array/countries"
             app:key="sources"
             app:title="Sources" />
+
+        <Preference
+            android:key="topics"
+            android:title="Topics">
+            <intent
+                android:action="com.laurencerawlings.pollen.ui.account.TopicsActivity"
+                android:targetClass="TopicsActivity" />
+        </Preference>
     </PreferenceCategory>
 
 </PreferenceScreen>

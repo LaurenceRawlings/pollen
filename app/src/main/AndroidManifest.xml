@@ -13,6 +13,19 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.account.TopicsActivity"
+            android:label="@string/title_activity_topics"
+            android:parentActivityName=".ui.account.AccountActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.account.AccountActivity" />
+
+            <intent-filter>
+                <action android:name="com.laurencerawlings.pollen.ui.account.TopicsActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ui.article.ArticleActivity"
             android:label="@string/title_activity_article"
             android:parentActivityName=".ui.main.MainActivity">
@@ -47,7 +60,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".ui.notification.NewsNotification" />
+        <receiver android:name=".receivers.NewsNotification" />
     </application>
 
 </manifest>

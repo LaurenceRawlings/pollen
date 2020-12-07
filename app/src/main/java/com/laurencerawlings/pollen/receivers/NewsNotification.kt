@@ -1,4 +1,4 @@
-package com.laurencerawlings.pollen.ui.notification
+package com.laurencerawlings.pollen.receivers
 
 import android.app.Notification
 import android.app.NotificationManager
@@ -18,9 +18,9 @@ class NewsNotification : BroadcastReceiver() {
     }
 
     companion object {
-        val NOTIFICATION_ID = "news_notification_id"
-        val NOTIFICATION = "news_notification"
-        val NOTIFICATION_CHANNEL = "news_notification_channel"
-        val DELAY: Long = 21600000 //6 hours
+        const val NOTIFICATION_ID = "news_notification_id"
+        const val NOTIFICATION = "news_notification"
+        const val NOTIFICATION_CHANNEL = "news_notification_channel"
+        const val DELAY: Long = 21600000 //6 hours
     }
 }

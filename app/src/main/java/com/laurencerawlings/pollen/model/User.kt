@@ -12,11 +12,8 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.laurencerawlings.pollen.ui.main.MainViewModel
+import com.laurencerawlings.pollen.api.NewsRepository
 import io.reactivex.subjects.BehaviorSubject
-
-val db = Firebase.firestore
-const val TAG = "User"
 
 class User(val id: String, val name: String?, val context: Context) {
     private val userRef = db.collection("users").document(id)
@@ -32,11 +29,15 @@ class User(val id: String, val name: String?, val context: Context) {
     val topicsObservable: BehaviorSubject<ArrayList<String>> = BehaviorSubject.create()
 
     init {
-        topics = localPreferences.getString("topics", "")?.split(",")?.map { it.trim() } as ArrayList<String>
+        val topicsString = localPreferences.getString("topics", null)
+
+        if (!topicsString.isNullOrBlank()) {
+            topics = topicsString.split(",")?.map { it.trim() } as ArrayList<String>
+        }
 
         userRef.addSnapshotListener { snapshot, e ->
             if (e != null) {
-                Log.w(TAG, "Listen failed.", e)
+                Log.w("User", "Listen failed.", e)
                 return@addSnapshotListener
             }
 
@@ -67,22 +68,22 @@ class User(val id: String, val name: String?, val context: Context) {
             localPreferences.registerOnSharedPreferenceChangeListener { _, key ->
                 when (key) {
                     "topics" -> {
-                        MainViewModel.personalUpdated = false
+                        NewsRepository.personalUpdated = false
                     }
                     "sources" -> {
-                        user?.setSources(localPreferences.getString("sources", "")?.split(",")?.map { it.trim() } as Array<String>)
-                        MainViewModel.headlinesUpdated = false
-                        MainViewModel.personalUpdated = false
-                        MainViewModel.allUpdated = false
+                        user?.setSources(localPreferences.getStringSet("sources", null)?.toTypedArray()!!)
+                        NewsRepository.headlinesUpdated = false
+                        NewsRepository.personalUpdated = false
+                        NewsRepository.allUpdated = false
                     }
                     "country" -> {
                         user?.setCountry(localPreferences.getString("country", "GB")!!)
-                        MainViewModel.headlinesUpdated = false
+                        NewsRepository.headlinesUpdated = false
                     }
                     "language" -> {
                         user?.setLanguage(localPreferences.getString("language", "EN")!!)
-                        MainViewModel.personalUpdated = false
-                        MainViewModel.allUpdated = false
+                        NewsRepository.personalUpdated = false
+                        NewsRepository.allUpdated = false
                     }
                 }
             }
@@ -122,6 +123,7 @@ class User(val id: String, val name: String?, val context: Context) {
     }
 
     companion object {
+        val db = Firebase.firestore
         var user: User? = null
 
         fun articleKey(article: ArticleDto): String {

@@ -4,18 +4,17 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.ListPreference
+import androidx.preference.MultiSelectListPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.firebase.ui.auth.AuthUI
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexboxLayoutManager
 import com.laurencerawlings.pollen.R
-import com.laurencerawlings.pollen.adapter.TopicRecyclerAdapter
+import com.laurencerawlings.pollen.api.NewsRepository
 import com.laurencerawlings.pollen.model.User
-import kotlinx.android.synthetic.main.activity_account.*
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class AccountActivity : AppCompatActivity() {
-    private lateinit var topicAdapter: TopicRecyclerAdapter
-
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,25 +24,6 @@ class AccountActivity : AppCompatActivity() {
             .replace(R.id.settings, SettingsFragment())
             .commit()
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
-
-        val layoutManager = FlexboxLayoutManager(this)
-        layoutManager.flexDirection = FlexDirection.ROW
-
-        topics.layoutManager = layoutManager
-
-        User.user?.topicsObservable?.subscribe {
-            updateTopics(it)
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        User.user?.setSources(arrayOf("bbc-news"))
-    }
-
-    private fun updateTopics(topicList: ArrayList<String>) {
-        topicAdapter = TopicRecyclerAdapter(topicList)
-        topics.adapter = topicAdapter
     }
 
     fun logout(view: View) {
@@ -59,32 +39,48 @@ class AccountActivity : AppCompatActivity() {
         AuthUI.getInstance()
             .delete(this)
             .addOnCompleteListener {
-                User.updateUser(this)
-                finish()
+                logout(view)
             }
-    }
-    fun addTopic(view: View) {
-        var isValid = false
-        val topic  = topic_input.text.toString()
-
-        if (topic.isBlank()) {
-            topic_input.error = "Topic cannot be blank"
-        } else if (!(topic.all { it.isLetterOrDigit() })) {
-            topic_input.error = "Topic must be alphanumeric"
-        } else {
-            isValid = true
-        }
-
-        if (isValid) {
-            User.user?.addTopic(topic)
-            topic_input.text?.clear()
-        }
-
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {
+        private val compositeDisposable = CompositeDisposable()
+
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
+
+            findPreference<ListPreference>("country")?.setOnPreferenceChangeListener { _, _ ->
+                updateSources()
+            }
+
+            findPreference<ListPreference>("language")?.setOnPreferenceChangeListener { _, _ ->
+                updateSources()
+            }
+
+            updateSources()
+        }
+
+        @SuppressLint("CheckResult")
+        private fun updateSources(): Boolean {
+            compositeDisposable.add(
+                NewsRepository.getSources().subscribeOn(Schedulers.io()).subscribe { sources ->
+                    activity?.runOnUiThread {
+                        val sourceNames = ArrayList<String>()
+                        val sourceIds = ArrayList<String>()
+                        val sourcesPreference = findPreference<MultiSelectListPreference>("sources")
+
+                        sources.sources.map {
+                            sourceNames.add(it.name)
+                            sourceIds.add(it.id)
+                        }
+
+                        sourcesPreference?.entryValues = sourceIds.toTypedArray()
+                        sourcesPreference?.entries = sourceNames.toTypedArray()
+                        sourcesPreference?.setDefaultValue(sourceIds.toTypedArray())
+                    }
+            })
+
+            return true
         }
     }
 }
