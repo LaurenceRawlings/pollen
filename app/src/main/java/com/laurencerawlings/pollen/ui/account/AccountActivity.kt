@@ -1,9 +1,7 @@
 package com.laurencerawlings.pollen.ui.account
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
@@ -41,8 +39,6 @@ class AccountActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         User.user?.setSources(arrayOf("bbc-news"))
-        User.user?.setCountry("GB")
-        User.user?.setLanguage("EN")
     }
 
     private fun updateTopics(topicList: ArrayList<String>) {
@@ -54,6 +50,7 @@ class AccountActivity : AppCompatActivity() {
         AuthUI.getInstance()
             .signOut(this)
             .addOnCompleteListener {
+                User.updateUser(this)
                 finish()
             }
     }
@@ -62,13 +59,27 @@ class AccountActivity : AppCompatActivity() {
         AuthUI.getInstance()
             .delete(this)
             .addOnCompleteListener {
+                User.updateUser(this)
                 finish()
             }
     }
-
     fun addTopic(view: View) {
-        User.user?.addTopic(topic_input.text.toString())
-        topic_input.text?.clear()
+        var isValid = false
+        val topic  = topic_input.text.toString()
+
+        if (topic.isBlank()) {
+            topic_input.error = "Topic cannot be blank"
+        } else if (!(topic.all { it.isLetterOrDigit() })) {
+            topic_input.error = "Topic must be alphanumeric"
+        } else {
+            isValid = true
+        }
+
+        if (isValid) {
+            User.user?.addTopic(topic)
+            topic_input.text?.clear()
+        }
+
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {

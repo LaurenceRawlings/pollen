@@ -2,7 +2,6 @@ package com.laurencerawlings.pollen.model
 
 import android.content.Context
 import android.net.Uri
-import android.provider.Settings.Global.getString
 import android.util.Log
 import androidx.preference.PreferenceManager
 import com.dfl.newsapi.enums.Country
@@ -13,6 +12,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.laurencerawlings.pollen.ui.main.MainViewModel
 import io.reactivex.subjects.BehaviorSubject
 
 val db = Firebase.firestore
@@ -63,6 +63,29 @@ class User(val id: String, val name: String?, val context: Context) {
                     topicsObservable.onNext(topics)
                 }
             }
+
+            localPreferences.registerOnSharedPreferenceChangeListener { _, key ->
+                when (key) {
+                    "topics" -> {
+                        MainViewModel.personalUpdated = false
+                    }
+                    "sources" -> {
+                        user?.setSources(localPreferences.getString("sources", "")?.split(",")?.map { it.trim() } as Array<String>)
+                        MainViewModel.headlinesUpdated = false
+                        MainViewModel.personalUpdated = false
+                        MainViewModel.allUpdated = false
+                    }
+                    "country" -> {
+                        user?.setCountry(localPreferences.getString("country", "GB")!!)
+                        MainViewModel.headlinesUpdated = false
+                    }
+                    "language" -> {
+                        user?.setLanguage(localPreferences.getString("language", "EN")!!)
+                        MainViewModel.personalUpdated = false
+                        MainViewModel.allUpdated = false
+                    }
+                }
+            }
         }
     }
 
@@ -90,11 +113,11 @@ class User(val id: String, val name: String?, val context: Context) {
         userRef.update("sources", sources.toList())
     }
 
-    fun setCountry(country: String) {
+    private fun setCountry(country: String) {
         userRef.update("country", country)
     }
 
-    fun setLanguage(language: String) {
+    private fun setLanguage(language: String) {
         userRef.update("language", language)
     }
 
@@ -107,12 +130,14 @@ class User(val id: String, val name: String?, val context: Context) {
         }
 
         fun updateUser(context: Context) {
-            if (Firebase.auth.currentUser != null) {
-                user = User(
+            user = if (Firebase.auth.currentUser != null) {
+                User(
                     Firebase.auth.currentUser!!.uid,
                     Firebase.auth.currentUser!!.displayName,
                     context
                 )
+            } else {
+                null
             }
         }
     }

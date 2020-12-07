@@ -21,6 +21,6 @@ class NewsNotification : BroadcastReceiver() {
         val NOTIFICATION_ID = "news_notification_id"
         val NOTIFICATION = "news_notification"
         val NOTIFICATION_CHANNEL = "news_notification_channel"
-        val DELAY: Long = 5000 //21600000 //6 hours
+        val DELAY: Long = 21600000 //6 hours
     }
 }

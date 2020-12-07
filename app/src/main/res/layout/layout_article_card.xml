@@ -46,7 +46,6 @@
                         android:id="@+id/article_source_icon"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:srcCompat="@drawable/ic_baseline_check_circle_24"
                         android:contentDescription="@string/article_placeholder_source_icon" />
                 </androidx.cardview.widget.CardView>
 

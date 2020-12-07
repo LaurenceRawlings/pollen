@@ -2,6 +2,7 @@ package com.laurencerawlings.pollen.ui.main
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.adapter.ArticleRecyclerAdapter
+import com.laurencerawlings.pollen.model.User
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -37,16 +39,21 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         recycler_view.layoutManager = LinearLayoutManager(activity)
+    }
 
-        compositeDisposable.add(
-            mainViewModel.articles().subscribeOn(Schedulers.io()).subscribe { articles ->
-                activity?.runOnUiThread {
-                    articleAdapter = ArticleRecyclerAdapter(articles.articles)
-                    recycler_view.adapter = articleAdapter
-                }
-            })
+    override fun onResume() {
+        super.onResume()
+        Log.i("POLLEN-UP", mainViewModel.isUpdated().toString())
+        if (!mainViewModel.isUpdated()) {
+            compositeDisposable.add(
+                mainViewModel.articles().subscribeOn(Schedulers.io()).subscribe { articles ->
+                    activity?.runOnUiThread {
+                        articleAdapter = ArticleRecyclerAdapter(articles.articles)
+                        recycler_view.adapter = articleAdapter
+                    }
+                })
+        }
     }
 
     companion object {

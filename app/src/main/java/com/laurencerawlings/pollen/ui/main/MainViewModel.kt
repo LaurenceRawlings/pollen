@@ -11,7 +11,6 @@ import io.reactivex.Single
 
 class MainViewModel : ViewModel() {
     private val _index = MutableLiveData<Int>()
-    private val newsApiRepository = NewsApiRepository("f14a38297ca6433b9f58c1d05932e6a5")
 
     fun setIndex(index: Int) {
         _index.value = index
@@ -25,16 +24,34 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    @SuppressLint("CheckResult")
-    private fun getPersonalNews(): Single<ArticlesDto> {
-        return newsApiRepository.getEverything(q = User.user?.topics?.joinToString(" OR "), language = User.user?.language, sortBy = SortBy.PUBLISHED_AT, pageSize = 100, page = 1)
+    fun isUpdated(): Boolean {
+        return when (_index.value) {
+            0 -> headlinesUpdated
+            1 -> personalUpdated
+            else -> allUpdated
+        }
     }
 
-    private fun getHeadlines(): Single<ArticlesDto> {
-        return newsApiRepository.getTopHeadlines(country = User.user?.country, pageSize = 100, page = 1)
-    }
+    companion object {
+        private val newsApiRepository = NewsApiRepository("f14a38297ca6433b9f58c1d05932e6a5")
 
-    private fun getAllNews(): Single<ArticlesDto> {
-        return newsApiRepository.getEverything(sources = "bbc-news", language = User.user?.language, sortBy = SortBy.PUBLISHED_AT, pageSize = 100, page = 1)
+        var headlinesUpdated = false
+        var personalUpdated = false
+        var allUpdated = false
+
+        private fun getPersonalNews(): Single<ArticlesDto> {
+            personalUpdated = true
+            return newsApiRepository.getEverything(q = User.user?.topics?.joinToString(" OR "), language = User.user?.language, sortBy = SortBy.PUBLISHED_AT, pageSize = 100, page = 1)
+        }
+
+        private fun getHeadlines(): Single<ArticlesDto> {
+            headlinesUpdated = true
+            return newsApiRepository.getTopHeadlines(country = User.user?.country, pageSize = 100, page = 1)
+        }
+
+        private fun getAllNews(): Single<ArticlesDto> {
+            allUpdated = true
+            return newsApiRepository.getEverything(sources = "bbc-news", language = User.user?.language, sortBy = SortBy.PUBLISHED_AT, pageSize = 100, page = 1)
+        }
     }
 }

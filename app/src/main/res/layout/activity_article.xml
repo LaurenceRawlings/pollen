@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxHeight="250dp"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true" />
 
     <com.google.android.material.circularreveal.CircularRevealLinearLayout
         android:layout_width="match_parent"
