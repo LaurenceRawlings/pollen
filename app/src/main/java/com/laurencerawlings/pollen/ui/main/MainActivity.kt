@@ -1,17 +1,13 @@
 package com.laurencerawlings.pollen.ui.main
 
 import android.app.*
-import android.content.Context
 import android.content.Intent
-import android.media.RingtoneManager
 import android.os.Bundle
-import android.os.SystemClock
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import androidx.viewpager.widget.ViewPager
 import com.firebase.ui.auth.AuthMethodPickerLayout
@@ -27,6 +23,7 @@ import com.laurencerawlings.pollen.ui.account.AccountActivity
 import com.laurencerawlings.pollen.ui.bookmarks.BookmarksActivity
 import com.laurencerawlings.pollen.receivers.NewsNotification
 import io.reactivex.plugins.RxJavaPlugins
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -74,7 +71,20 @@ class MainActivity : AppCompatActivity() {
         val localPreferences = PreferenceManager.getDefaultSharedPreferences(this)
 
         if (localPreferences.getBoolean("notifications", true)) {
-            scheduleNotification()
+            var delayHours = localPreferences.getString("notification-interval", "6")?.toLong()
+
+            if (delayHours == null) {
+                delayHours = 6
+            }
+
+            val delayMilliseconds = delayHours.times(3600000)
+
+            val calendar = Calendar.getInstance()
+            val notificationHour = calendar.get(Calendar.HOUR_OF_DAY) + delayHours
+
+            if (notificationHour > 5 || notificationHour < 23) {
+                NewsNotification.schedule(this, this, delayMilliseconds)
+            }
         }
     }
 
@@ -95,10 +105,6 @@ class MainActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 )
                 myToast.show()
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                // ...
                 User.user = null
             }
         }
@@ -148,37 +154,5 @@ class MainActivity : AppCompatActivity() {
                 .build(),
             RC.SIGN_IN.code
         )
-    }
-
-    private fun scheduleNotification() {
-        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channel = NotificationChannel(NewsNotification.NOTIFICATION_CHANNEL, NewsNotification.NOTIFICATION_CHANNEL, NotificationManager.IMPORTANCE_DEFAULT)
-
-        manager.createNotificationChannel(channel)
-
-
-        val builder = NotificationCompat.Builder(this, NewsNotification.NOTIFICATION_CHANNEL)
-            .setContentTitle("New News")
-            .setContentText("You have new news stories to check out!")
-            .setAutoCancel(true)
-            .setSmallIcon(R.drawable.ic_pollen)
-            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-
-        val intent = Intent(this, this::class.java)
-        val activity = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT)
-
-        builder.setContentIntent(activity)
-
-        val notification: Notification = builder.build()
-        val notificationIntent = Intent(this, NewsNotification::class.java)
-
-        notificationIntent.putExtra(NewsNotification.NOTIFICATION_ID, 1)
-        notificationIntent.putExtra(NewsNotification.NOTIFICATION, notification)
-
-        val pendingIntent = PendingIntent.getBroadcast(this, 1, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT)
-        val futureInMillis: Long = SystemClock.elapsedRealtime() + NewsNotification.DELAY
-        val alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent)
     }
 }
