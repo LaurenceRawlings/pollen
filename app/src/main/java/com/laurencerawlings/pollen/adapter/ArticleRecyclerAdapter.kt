@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dfl.newsapi.model.ArticleDto
-import com.google.android.material.snackbar.Snackbar
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.model.User
 import com.laurencerawlings.pollen.ui.Utils
@@ -17,13 +16,10 @@ import com.laurencerawlings.pollen.ui.article.ArticleActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.layout_article_card.view.*
 import java.net.URL
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 
-class ArticleRecyclerAdapter(articles: List<ArticleDto>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ArticleRecyclerAdapter(articles: List<ArticleDto>) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items = articles
 
@@ -38,7 +34,7 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) : RecyclerView.Adapter<
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(holder) {
+        when (holder) {
             is ArticleViewHolder -> {
                 holder.bind(items[position])
             }
@@ -49,7 +45,7 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) : RecyclerView.Adapter<
         return items.size
     }
 
-    inner class ArticleViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val thumbnail: ImageView = itemView.article_thumbnail
         private val sourceIcon: ImageView = itemView.article_source_icon
         private val source: TextView = itemView.article_source
@@ -66,14 +62,14 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) : RecyclerView.Adapter<
             Picasso.get().load(article.urlToImage).fit().centerCrop().into(thumbnail)
             Picasso.get().load("http://" + URL(article.url).host + "/favicon.ico").into(sourceIcon)
 
-            val hours = hoursPassed(article.publishedAt)
+            val hours = Utils.hoursPassed(article.publishedAt)
 
             when {
                 hours < 1 -> {
                     details.text = "now"
                 }
                 hours >= 24 -> {
-                    details.text = "${hours/24}d ago"
+                    details.text = "${hours / 24}d ago"
                 }
                 else -> {
                     details.text = "${hours}h ago"
@@ -92,7 +88,7 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) : RecyclerView.Adapter<
                         Utils.showSnackbar("Bookmark removed", it)
                     }
                 } else {
-                    Utils.showSnackbar("You must be signed in to bookmark articles!", it)
+                    Utils.showSnackbar("You must be signed in to ic_bookmark articles!", it)
                     bookmarked.isChecked = false
                 }
 
@@ -110,36 +106,9 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) : RecyclerView.Adapter<
             }
 
             card.setOnClickListener {
-                ArticleActivity.article = article
+                ArticleActivity.currentArticle = article
                 it.context.startActivity(Intent(it.context, ArticleActivity::class.java))
             }
-        }
-
-        private fun stringToDate(date: String): Date? {
-            var sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ROOT)
-            return try {
-                sdf.parse(date)
-            } catch (_: ParseException) {
-                try {
-                    sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.ms'Z'", Locale.ROOT)
-                    sdf.parse(date)
-                } catch (_: ParseException) {
-                    try {
-                        sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ROOT)
-                        sdf.parse(date.split('+')[0])
-                    } catch (_: ParseException) {
-                        null
-                    }
-                }
-            }
-        }
-
-        private fun hoursPassed(date: String): Int {
-            val now = Date()
-            val then = stringToDate(date)
-
-            val diffInMS: Long = kotlin.math.abs(now.time - (then?.time ?: 0))
-            return TimeUnit.HOURS.convert(diffInMS, TimeUnit.MILLISECONDS).toInt()
         }
 
         private fun setBookmarked(article: ArticleDto, checkBox: CheckBox) {

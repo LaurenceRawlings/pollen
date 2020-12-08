@@ -1,6 +1,5 @@
 package com.laurencerawlings.pollen.ui.account
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +15,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class AccountActivity : AppCompatActivity() {
-    @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
@@ -51,35 +49,37 @@ class AccountActivity : AppCompatActivity() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
-            PreferenceManager.getDefaultSharedPreferences(context).registerOnSharedPreferenceChangeListener { preferences, key ->
-                when (key) {
-                    "topics" -> {
-                        NewsRepository.personalUpdated = false
-                    }
-                    "sources" -> {
-                        User.user?.setSources(preferences.getStringSet("sources", null)?.toTypedArray()!!)
-                        NewsRepository.headlinesUpdated = false
-                        NewsRepository.personalUpdated = false
-                        NewsRepository.allUpdated = false
-                    }
-                    "country" -> {
-                        User.user?.setCountry(preferences.getString("country", "GB")!!)
-                        NewsRepository.headlinesUpdated = false
-                        updateSources()
-                    }
-                    "language" -> {
-                        User.user?.setLanguage(preferences.getString("language", "EN")!!)
-                        NewsRepository.personalUpdated = false
-                        NewsRepository.allUpdated = false
-                        updateSources()
+            PreferenceManager.getDefaultSharedPreferences(context)
+                .registerOnSharedPreferenceChangeListener { preferences, key ->
+                    when (key) {
+                        "topics" -> {
+                            NewsRepository.forYouFeedUpdated = false
+                        }
+                        "sources" -> {
+                            User.user?.setSources(
+                                preferences.getStringSet("sources", null)?.toTypedArray()!!
+                            )
+                            NewsRepository.headlineFeedUpdated = false
+                            NewsRepository.forYouFeedUpdated = false
+                            NewsRepository.everythingFeedUpdated = false
+                        }
+                        "country" -> {
+                            User.user?.setCountry(preferences.getString("country", "GB")!!)
+                            NewsRepository.headlineFeedUpdated = false
+                            updateSources()
+                        }
+                        "language" -> {
+                            User.user?.setLanguage(preferences.getString("language", "EN")!!)
+                            NewsRepository.forYouFeedUpdated = false
+                            NewsRepository.everythingFeedUpdated = false
+                            updateSources()
+                        }
                     }
                 }
-            }
 
             updateSources()
         }
 
-        @SuppressLint("CheckResult")
         private fun updateSources() {
             compositeDisposable.add(
                 NewsRepository.getSources().subscribeOn(Schedulers.io()).subscribe { sources ->
@@ -97,7 +97,7 @@ class AccountActivity : AppCompatActivity() {
                         sourcesPreference?.entries = sourceNames.toTypedArray()
                         sourcesPreference?.setDefaultValue(sourceIds.toTypedArray())
                     }
-            })
+                })
         }
     }
 }

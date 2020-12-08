@@ -7,8 +7,8 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.ui.main.MainFragment
 
-class MainTabAdapter(private val context: Context, fm: FragmentManager)
-    : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class MainTabAdapter(private val context: Context, fm: FragmentManager) :
+    FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private val tabTitles = arrayOf(
         R.string.tab_text_2,
@@ -25,6 +25,6 @@ class MainTabAdapter(private val context: Context, fm: FragmentManager)
     }
 
     override fun getCount(): Int {
-        return 3
+        return tabTitles.size
     }
 }

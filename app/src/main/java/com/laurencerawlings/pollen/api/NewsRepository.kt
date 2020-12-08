@@ -9,40 +9,49 @@ import io.reactivex.Single
 
 class NewsRepository {
     companion object {
-        private val newsApiRepository = NewsApiRepository("49294c53574d438c8565fd205a6948b5")
+        private val newsApiRepository = NewsApiRepository("e4d6e296153f46c6993bb300c245463a")
 
-        var headlinesUpdated = false
-        var personalUpdated = false
-        var allUpdated = false
+        var headlineFeedUpdated = false
+        var forYouFeedUpdated = false
+        var everythingFeedUpdated = false
 
         fun getPersonalNews(): Single<ArticlesDto> {
-            personalUpdated = true
-            return newsApiRepository.getEverything(q = User.user?.topics?.joinToString(" OR "),
+            forYouFeedUpdated = true
+            return newsApiRepository.getEverything(
+                q = User.user?.topics?.joinToString(" OR "),
                 sources = User.user?.sources?.joinToString(","),
                 language = User.user?.language,
                 sortBy = SortBy.PUBLISHED_AT,
                 pageSize = 100,
-                page = 1)
+                page = 1
+            )
         }
 
         fun getHeadlines(): Single<ArticlesDto> {
-            headlinesUpdated = true
-            return newsApiRepository.getTopHeadlines(sources = User.user?.sources?.joinToString(","),
+            headlineFeedUpdated = true
+            return newsApiRepository.getTopHeadlines(
+                sources = User.user?.sources?.joinToString(","),
                 pageSize = 100,
-                page = 1)
+                page = 1
+            )
         }
 
         fun getAllNews(): Single<ArticlesDto> {
-            allUpdated = true
-            return newsApiRepository.getEverything(sources = User.user?.sources?.joinToString(","),
+            everythingFeedUpdated = true
+            return newsApiRepository.getEverything(
+                sources = User.user?.sources?.joinToString(","),
                 language = User.user?.language,
                 sortBy = SortBy.PUBLISHED_AT,
                 pageSize = 100,
-                page = 1)
+                page = 1
+            )
         }
 
         fun getSources(): Single<SourcesDto> {
-            return newsApiRepository.getSources(country = User.user?.country, language = User.user?.language)
+            return newsApiRepository.getSources(
+                country = User.user?.country,
+                language = User.user?.language
+            )
         }
     }
 }

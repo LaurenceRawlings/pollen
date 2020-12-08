@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Topics"
-            android:onClick="topics"/>
+            android:onClick="onAddTopicsClicked"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

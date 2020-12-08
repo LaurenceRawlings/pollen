@@ -23,9 +23,9 @@ class MainViewModel : ViewModel() {
 
     fun isUpdated(): Boolean {
         return when (_index.value) {
-            0 -> NewsRepository.headlinesUpdated
-            1 -> NewsRepository.personalUpdated
-            else -> NewsRepository.allUpdated
+            0 -> NewsRepository.headlineFeedUpdated
+            1 -> NewsRepository.forYouFeedUpdated
+            else -> NewsRepository.everythingFeedUpdated
         }
     }
 }

@@ -19,9 +19,9 @@ class NewsNotification : BroadcastReceiver() {
         val notification: Notification? = intent!!.getParcelableExtra(NOTIFICATION)
         val notificationId = intent.getIntExtra(NOTIFICATION_ID, 0)
 
-        NewsRepository.headlinesUpdated = false
-        NewsRepository.personalUpdated = false
-        NewsRepository.allUpdated = false
+        NewsRepository.headlineFeedUpdated = false
+        NewsRepository.forYouFeedUpdated = false
+        NewsRepository.everythingFeedUpdated = false
 
         notificationManager.notify(notificationId, notification)
     }
@@ -48,7 +48,7 @@ class NewsNotification : BroadcastReceiver() {
                 .setContentTitle("New News")
                 .setContentText("You have new news stories to check out!")
                 .setAutoCancel(true)
-                .setSmallIcon(R.drawable.ic_pollen)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
 
             val intent = Intent(context, intentActivity::class.java)

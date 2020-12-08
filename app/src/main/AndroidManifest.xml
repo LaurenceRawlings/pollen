@@ -12,10 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
         <activity
             android:name=".ui.account.TopicsActivity"
             android:label="@string/title_activity_topics"
             android:parentActivityName=".ui.account.AccountActivity">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.account.AccountActivity" />
@@ -25,42 +27,48 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.article.ArticleActivity"
             android:label="@string/title_activity_article"
             android:parentActivityName=".ui.main.MainActivity">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />
         </activity>
+
         <activity
             android:name=".ui.bookmarks.BookmarksActivity"
             android:label="@string/title_activity_bookmarks"
             android:parentActivityName=".ui.main.MainActivity">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />
         </activity>
+
         <activity
             android:name=".ui.account.AccountActivity"
             android:label="@string/title_activity_account"
             android:parentActivityName=".ui.main.MainActivity">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.main.MainActivity" />
         </activity>
+
         <activity
             android:name=".ui.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <receiver android:name=".receivers.NewsNotification" />
     </application>
-
 </manifest>

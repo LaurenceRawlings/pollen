@@ -11,28 +11,26 @@ import kotlinx.android.synthetic.main.activity_article.*
 
 
 class ArticleActivity : AppCompatActivity() {
+    companion object {
+        var currentArticle: ArticleDto? = null
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_article)
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
-        if (article == null) {
-            return
+        if (currentArticle != null) {
+            supportActionBar?.title = currentArticle!!.source.name
+
+            Picasso.get().load(currentArticle!!.urlToImage).into(article_thumbnail)
+            article_headline.text = currentArticle!!.title
+            article_description.text = currentArticle!!.description
+
+            article_read_more.setOnClickListener {
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(currentArticle!!.url))
+                startActivity(browserIntent)
+            }
         }
-
-        supportActionBar?.title = article!!.source.name
-
-        Picasso.get().load(article!!.urlToImage).into(article_thumbnail)
-        article_headline.text = article!!.title
-        article_description.text = article!!.description
-
-        article_read_more.setOnClickListener {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(article!!.url))
-            startActivity(browserIntent)
-        }
-    }
-
-    companion object {
-        var article: ArticleDto? = null
     }
 }

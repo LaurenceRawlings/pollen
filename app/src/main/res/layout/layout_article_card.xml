@@ -17,14 +17,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/ic_launcher_background"
             android:contentDescription="@string/article_placeholder_thumbnail"
             android:layout_marginBottom="90dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/card_background"
+            android:background="@drawable/bg_article_card"
             android:layout_alignParentBottom="true"
             android:padding="10dp"
             android:orientation="vertical"
@@ -84,7 +83,7 @@
                     android:id="@+id/bookmark"
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"
-                    android:button="@drawable/bookmark"
+                    android:button="@drawable/ic_bookmark"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:gravity="center"

@@ -3,11 +3,8 @@ package com.laurencerawlings.pollen.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipDrawable
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.model.User
 import kotlinx.android.synthetic.main.layout_topic.view.*
@@ -26,7 +23,7 @@ class TopicRecyclerAdapter(topics: List<String>) : RecyclerView.Adapter<Recycler
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(holder) {
+        when (holder) {
             is TopicRecyclerAdapter.TopicViewHolder -> {
                 holder.bind(items[position])
             }
@@ -37,7 +34,7 @@ class TopicRecyclerAdapter(topics: List<String>) : RecyclerView.Adapter<Recycler
         return items.size
     }
 
-    inner class TopicViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class TopicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val topicChip: Chip = itemView.topic
 
         fun bind(topic: String) {

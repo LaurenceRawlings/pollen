@@ -15,6 +15,32 @@ import com.google.firebase.ktx.Firebase
 import io.reactivex.subjects.BehaviorSubject
 
 class User(val id: String, val name: String?, val context: Context) {
+    companion object {
+        val db = Firebase.firestore
+        var user: User? = null
+
+        fun articleKey(article: ArticleDto): String {
+            val url = Uri.parse(article.url)
+            return "${url.host?.replace('.', '-')}-${url.lastPathSegment}"
+        }
+
+        fun updateUser(context: Context) {
+            user = if (Firebase.auth.currentUser != null) {
+                User(
+                    Firebase.auth.currentUser!!.uid,
+                    Firebase.auth.currentUser!!.displayName,
+                    context
+                )
+            } else {
+                null
+            }
+        }
+
+        fun isAuthed(): Boolean {
+            return Firebase.auth.currentUser != null
+        }
+    }
+
     private val userRef = db.collection("users").document(id)
     private val localPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
@@ -40,21 +66,28 @@ class User(val id: String, val name: String?, val context: Context) {
                 return@addSnapshotListener
             }
 
-            if (snapshot != null ) {
+            if (snapshot != null) {
                 if (!snapshot.exists()) {
-                    userRef.set(mapOf("country" to "GB", "language" to "EN", "topics" to arrayListOf<String>(), "sources" to arrayListOf<String>()))
+                    userRef.set(
+                        mapOf(
+                            "country" to "GB",
+                            "language" to "EN",
+                            "topics" to arrayListOf<String>(),
+                            "sources" to arrayListOf<String>()
+                        )
+                    )
                     country = Country.GB
                     language = Language.EN
                     topics = ArrayList()
                     sources = ArrayList()
                 } else {
-                    topics = snapshot.data?.get("topics") as ArrayList<String>
-                    with (localPreferences.edit()) {
+                    topics = snapshot.data?.get("topics") as? ArrayList<String> ?: ArrayList()
+                    with(localPreferences.edit()) {
                         putString("topics", topics.joinToString(","))
                         apply()
                     }
 
-                    sources = snapshot.data?.get("sources") as ArrayList<String>
+                    sources = snapshot.data?.get("sources") as? ArrayList<String> ?: ArrayList()
                     val countryString = snapshot.data?.get("country") as String
                     val languageString = snapshot.data?.get("language") as String
 
@@ -96,27 +129,5 @@ class User(val id: String, val name: String?, val context: Context) {
 
     fun setLanguage(language: String) {
         userRef.update("language", language)
-    }
-
-    companion object {
-        val db = Firebase.firestore
-        var user: User? = null
-
-        fun articleKey(article: ArticleDto): String {
-            val url = Uri.parse(article.url)
-            return "${url.host?.replace('.', '-')}-${url.lastPathSegment}"
-        }
-
-        fun updateUser(context: Context) {
-            user = if (Firebase.auth.currentUser != null) {
-                User(
-                    Firebase.auth.currentUser!!.uid,
-                    Firebase.auth.currentUser!!.displayName,
-                    context
-                )
-            } else {
-                null
-            }
-        }
     }
 }

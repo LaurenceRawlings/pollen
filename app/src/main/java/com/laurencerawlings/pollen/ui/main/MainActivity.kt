@@ -1,66 +1,59 @@
 package com.laurencerawlings.pollen.ui.main
 
-import android.app.*
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.preference.PreferenceManager
 import androidx.viewpager.widget.ViewPager
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.tabs.TabLayout
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.adapter.MainTabAdapter
 import com.laurencerawlings.pollen.model.User
-import com.laurencerawlings.pollen.ui.account.AccountActivity
-import com.laurencerawlings.pollen.ui.bookmarks.BookmarksActivity
 import com.laurencerawlings.pollen.receivers.NewsNotification
 import com.laurencerawlings.pollen.ui.Utils
+import com.laurencerawlings.pollen.ui.account.AccountActivity
+import com.laurencerawlings.pollen.ui.bookmarks.BookmarksActivity
 import io.reactivex.plugins.RxJavaPlugins
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
-    private val providers = arrayListOf(
-        AuthUI.IdpConfig.EmailBuilder().build(),
-        AuthUI.IdpConfig.PhoneBuilder().build(),
-        AuthUI.IdpConfig.GoogleBuilder().build()
-    )
+    companion object {
+        private val signInProviders = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.PhoneBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build()
+        )
 
-    private var customLayout: AuthMethodPickerLayout = AuthMethodPickerLayout.Builder(R.layout.activity_login)
-        .setGoogleButtonId(R.id.google_button)
-        .setEmailButtonId(R.id.email_button)
-        .setPhoneButtonId(R.id.phone_button)
-        .build()
+        private val customSignInLayout: AuthMethodPickerLayout =
+            AuthMethodPickerLayout.Builder(R.layout.activity_login)
+                .setGoogleButtonId(R.id.google_button)
+                .setEmailButtonId(R.id.email_button)
+                .setPhoneButtonId(R.id.phone_button)
+                .build()
 
-    private enum class RC(val code: Int) {
-        SIGN_IN(1),
-        BOOKMARKS(2),
-        SETTINGS(3)
+        private enum class RequestCodes(val code: Int) {
+            SIGN_IN(1),
+            BOOKMARKS(2),
+            SETTINGS(3)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val sectionsPagerAdapter = MainTabAdapter(this, supportFragmentManager)
-        val viewPager: ViewPager = findViewById(R.id.view_pager)
-        viewPager.adapter = sectionsPagerAdapter
-        viewPager.offscreenPageLimit = 2
-        viewPager.currentItem = 1
-        val tabs: TabLayout = findViewById(R.id.tabs)
-        tabs.setupWithViewPager(viewPager)
-
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        setupTabs()
 
         User.updateUser(this)
 
@@ -69,37 +62,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        val localPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-
-        if (localPreferences.getBoolean("notifications", true)) {
-            var delayHours = localPreferences.getString("notification-interval", "6")?.toLong()
-
-            if (delayHours == null) {
-                delayHours = 6
-            }
-
-            val delayMilliseconds = delayHours.times(3600000)
-
-            val calendar = Calendar.getInstance()
-            val notificationHour = calendar.get(Calendar.HOUR_OF_DAY) + delayHours
-
-            if (notificationHour > 5 || notificationHour < 23) {
-                NewsNotification.schedule(this, this, delayMilliseconds)
-            }
-        }
+        scheduleNotification()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == RC.SIGN_IN.code) {
+        if (requestCode == RequestCodes.SIGN_IN.code) {
             IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_OK) {
                 Utils.showSnackbar("Logged in!", findViewById(R.id.content))
                 User.updateUser(this)
             } else {
-                Utils.showSnackbar("Logged in failed!", findViewById(R.id.content))
+                Utils.showSnackbar("Log in failed!", findViewById(R.id.content))
                 User.user = null
             }
         }
@@ -113,45 +89,78 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.app_bar_account -> {
-                account()
+                openAccountActivity()
             }
             R.id.app_bar_bookmarks -> {
-                bookmarks()
+                openBookmarksActivity()
             }
         }
 
         return super.onOptionsItemSelected(item)
     }
 
-    fun topics(view: View) {
-        account()
+    fun onAddTopicsClicked(view: View) {
+        openAccountActivity()
     }
 
-    private fun account() {
-        if (Firebase.auth.currentUser != null) {
-            startActivityForResult(Intent(this, AccountActivity::class.java), RC.SETTINGS.code)
+    private fun setupTabs() {
+        val sectionsPagerAdapter = MainTabAdapter(this, supportFragmentManager)
+        val viewPager: ViewPager = view_pager
+        val tabs: TabLayout = tabs
+
+        viewPager.adapter = sectionsPagerAdapter
+        viewPager.offscreenPageLimit = 2
+        viewPager.currentItem = 1
+        tabs.setupWithViewPager(viewPager)
+    }
+
+    private fun openAccountActivity() {
+        if (User.isAuthed()) {
+            startActivityForResult(
+                Intent(this, AccountActivity::class.java),
+                RequestCodes.SETTINGS.code
+            )
         } else {
-            signIn()
+            openSignInActivity()
         }
     }
 
-    private fun bookmarks() {
-        if (Firebase.auth.currentUser != null) {
-            startActivityForResult(Intent(this, BookmarksActivity::class.java), RC.BOOKMARKS.code)
+    private fun openBookmarksActivity() {
+        if (User.isAuthed()) {
+            startActivityForResult(
+                Intent(this, BookmarksActivity::class.java),
+                RequestCodes.BOOKMARKS.code
+            )
         } else {
-            signIn()
+            openSignInActivity()
         }
     }
 
-    private fun signIn() {
+    private fun openSignInActivity() {
         startActivityForResult(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
+                .setAvailableProviders(signInProviders)
                 .setTheme(R.style.AppTheme_NoActionBar)
-                .setAuthMethodPickerLayout(customLayout)
+                .setAuthMethodPickerLayout(customSignInLayout)
                 .build(),
-            RC.SIGN_IN.code
+            RequestCodes.SIGN_IN.code
         )
+    }
+
+    private fun scheduleNotification() {
+        val localPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+
+        if (localPreferences.getBoolean("notifications", true)) {
+            val delayHours = localPreferences.getString("notification-interval", "6")!!.toLong()
+            val delayMilliseconds = delayHours.times(3600000)
+
+            val calendar = Calendar.getInstance()
+            val notificationHour = calendar.get(Calendar.HOUR_OF_DAY) + delayHours
+
+            if (notificationHour > 5 || notificationHour < 23) {
+                NewsNotification.schedule(applicationContext, this, delayMilliseconds)
+            }
+        }
     }
 }

@@ -2,7 +2,7 @@
     <string name="app_name">Pollen</string>
     <string name="tab_text_1">For You</string>
     <string name="tab_text_2">Headlines</string>
-    <string name="tab_text_3">All</string>
+    <string name="tab_text_3">Everything</string>
     <string name="article_placeholder_source">source</string>
     <string name="article_placeholder_headline">Headline</string>
     <string name="article_placeholder_details">1h ago</string>
