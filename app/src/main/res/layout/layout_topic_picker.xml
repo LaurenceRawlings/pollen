@@ -13,19 +13,19 @@
             android:id="@+id/topic_input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="0.9"
             android:hint="keyword"
             android:inputType="text"
             android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:layout_weight="0.9" />
+            android:singleLine="true" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/topic_add"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            android:textSize="12sp"
-            android:text="+" />
+            android:text="+"
+            android:textSize="12sp" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -34,7 +34,7 @@
         android:id="@+id/topics"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@drawable/bg_topics_recycler_view"
-        android:layout_margin="16dp" />
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_topics_recycler_view" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

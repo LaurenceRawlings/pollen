@@ -20,22 +20,22 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:gravity="center"
+                android:letterSpacing="0.4"
                 android:minHeight="?actionBarSize"
                 android:padding="16dp"
                 android:text="@string/app_name"
                 android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                android:letterSpacing="0.4"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
                 android:textSize="25sp" />
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="?actionBarSize"
                 android:layout_centerVertical="true"
+                android:minHeight="?actionBarSize"
                 app:theme="@style/Theme.MaterialComponents.Dialog" />
         </RelativeLayout>
 
