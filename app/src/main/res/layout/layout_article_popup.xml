@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.circularreveal.CircularRevealLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.article.ArticleActivity"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/article_thumbnail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxHeight="250dp"
+        android:layout_height="250dp"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true" />
 
@@ -20,27 +17,36 @@
         android:padding="8dp"
         android:orientation="vertical">
 
+        <com.google.android.material.circularreveal.CircularRevealLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <include layout="@layout/layout_article_source" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/article_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"/>
+
+        </com.google.android.material.circularreveal.CircularRevealLinearLayout>
+
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/article_headline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/article_placeholder_headline"
-            android:textColor="#000000"
-            android:textSize="20sp"/>
+            android:textColor="@color/colorOnPrimary"
+            android:textSize="20sp"
+            android:layout_marginBottom="16dp"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/article_description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="1.2" />
 
     </com.google.android.material.circularreveal.CircularRevealLinearLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/article_read_more"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Read More"/>
-
 
 </com.google.android.material.circularreveal.CircularRevealLinearLayout>

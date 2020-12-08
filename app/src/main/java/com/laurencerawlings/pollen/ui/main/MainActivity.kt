@@ -9,6 +9,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import androidx.viewpager.widget.ViewPager
+import com.dfl.newsapi.model.ArticleDto
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
@@ -28,6 +29,8 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
     companion object {
+        var currentArticle: ArticleDto? = null
+
         private val signInProviders = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
             AuthUI.IdpConfig.PhoneBuilder().build(),

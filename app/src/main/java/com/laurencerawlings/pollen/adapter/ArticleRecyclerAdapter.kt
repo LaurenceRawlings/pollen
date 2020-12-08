@@ -1,20 +1,28 @@
 package com.laurencerawlings.pollen.adapter
 
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.dfl.newsapi.model.ArticleDto
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.model.User
 import com.laurencerawlings.pollen.ui.Utils
-import com.laurencerawlings.pollen.ui.article.ArticleActivity
+import com.laurencerawlings.pollen.ui.main.MainActivity
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.layout_article_popup.view.*
 import kotlinx.android.synthetic.main.layout_article_card.view.*
+import kotlinx.android.synthetic.main.layout_article_card.view.article_headline
+import kotlinx.android.synthetic.main.layout_article_card.view.article_thumbnail
+import kotlinx.android.synthetic.main.layout_article_source.view.*
 import java.net.URL
 
 
@@ -59,22 +67,10 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) :
 
             if (!article.urlToImage.isNullOrEmpty()) {
                 Picasso.get().load(article.urlToImage).fit().centerCrop().into(thumbnail)
-                Picasso.get().load("http://" + URL(article.url).host + "/favicon.ico").into(sourceIcon)
+                Picasso.get().load(faviconUrl(article.url)).fit().centerCrop().into(sourceIcon)
             }
 
-            val hours = Utils.hoursPassed(article.publishedAt)
-
-            when {
-                hours < 1 -> {
-                    details.text = "now"
-                }
-                hours >= 24 -> {
-                    details.text = "${hours / 24}d ago"
-                }
-                else -> {
-                    details.text = "${hours}h ago"
-                }
-            }
+            details.text = timeString(article.publishedAt)
 
             setBookmarked(article, bookmarked)
 
@@ -106,9 +102,29 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) :
             }
 
             card.setOnClickListener {
-                ArticleActivity.currentArticle = article
-                it.context.startActivity(Intent(it.context, ArticleActivity::class.java))
+                MainActivity.currentArticle = article
+                openPopup(it.context)
             }
+        }
+
+        private fun timeString(publishedAt: String): String {
+            val hours = Utils.hoursPassed(publishedAt)
+
+            return when {
+                hours < 1 -> {
+                    "now"
+                }
+                hours >= 24 -> {
+                    "${hours / 24}d ago"
+                }
+                else -> {
+                    "${hours}h ago"
+                }
+            }
+        }
+
+        private fun faviconUrl(url: String): String {
+            return "http://" + URL(url).host + "/favicon.ico"
         }
 
         private fun setBookmarked(article: ArticleDto, checkBox: CheckBox) {
@@ -116,6 +132,36 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) :
                 ?.addOnSuccessListener {
                     checkBox.isChecked = it.exists()
                 }
+        }
+
+        private fun openPopup(context: Context) {
+            val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+            val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+
+            val articleLayout: View = inflater.inflate(R.layout.layout_article_popup, null)
+            builder.setView(articleLayout)
+
+            if (MainActivity.currentArticle != null) {
+                if (MainActivity.currentArticle!!.urlToImage.isNotEmpty()) {
+                    Picasso.get().load(MainActivity.currentArticle!!.urlToImage).fit().centerCrop().into(articleLayout.article_thumbnail)
+                    Picasso.get().load(faviconUrl(MainActivity.currentArticle!!.url)).fit().centerCrop().into(articleLayout.article_source_icon)
+                }
+
+                articleLayout.article_source.text = MainActivity.currentArticle!!.source.name
+                articleLayout.article_time.text = "• " + timeString(MainActivity.currentArticle!!.publishedAt)
+                articleLayout.article_headline.text = MainActivity.currentArticle!!.title
+                articleLayout.article_description.text = MainActivity.currentArticle!!.description
+            }
+
+            builder.setPositiveButton("Close") { _, _ -> }
+            builder.setNeutralButton("Read more") { _, _ ->
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(MainActivity.currentArticle!!.url))
+                startActivity(context, browserIntent, null)
+            }
+
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
         }
     }
 }

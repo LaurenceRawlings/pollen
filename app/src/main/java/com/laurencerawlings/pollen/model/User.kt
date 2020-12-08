@@ -1,10 +1,6 @@
 package com.laurencerawlings.pollen.model
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.net.Uri
-import android.util.Log
-import androidx.preference.PreferenceManager
 import com.dfl.newsapi.enums.Country
 import com.dfl.newsapi.enums.Language
 import com.dfl.newsapi.model.ArticleDto
