@@ -1,6 +1,8 @@
 package com.laurencerawlings.pollen.ui.account
 
 import android.app.Activity
+import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +18,7 @@ import com.laurencerawlings.pollen.model.User
 import com.laurencerawlings.pollen.ui.Utils
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+
 
 class AccountActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,12 +52,11 @@ class AccountActivity : AppCompatActivity() {
 
     class SettingsFragment : PreferenceFragmentCompat() {
         private val compositeDisposable = CompositeDisposable()
+        private var listener: OnSharedPreferenceChangeListener
 
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(R.xml.root_preferences, rootKey)
-
-            PreferenceManager.getDefaultSharedPreferences(context)
-                .registerOnSharedPreferenceChangeListener { preferences, key ->
+        init {
+            listener =
+                OnSharedPreferenceChangeListener { preferences, key ->
                     when (key) {
                         "sources" -> {
                             User.user.setSources(
@@ -81,7 +83,11 @@ class AccountActivity : AppCompatActivity() {
                         }
                     }
                 }
+        }
 
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            setPreferencesFromResource(R.xml.root_preferences, rootKey)
+            PreferenceManager.getDefaultSharedPreferences(context).registerOnSharedPreferenceChangeListener(listener)
             updateSources()
         }
 

@@ -17,7 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:contentDescription="@string/article_placeholder_thumbnail"
             android:layout_marginBottom="90dp"/>
 
         <LinearLayout
@@ -36,7 +35,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="@string/article_placeholder_headline"
                 android:textColor="@color/design_default_color_on_secondary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -49,8 +47,7 @@
                 <TextView
                     android:id="@+id/article_details"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/article_placeholder_details" />
+                    android:layout_height="wrap_content" />
 
                 <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/bookmark"
@@ -66,8 +63,7 @@
                     android:id="@+id/share_article"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    app:srcCompat="@drawable/ic_baseline_share_24"
-                    android:contentDescription="@string/article_placeholder_share" />
+                    app:srcCompat="@drawable/ic_baseline_share_24" />
 
             </LinearLayout>
         </LinearLayout>
