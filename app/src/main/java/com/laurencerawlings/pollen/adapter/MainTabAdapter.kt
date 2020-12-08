@@ -11,9 +11,9 @@ class MainTabAdapter(private val context: Context, fm: FragmentManager) :
     FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private val tabTitles = arrayOf(
-        R.string.tab_text_2,
-        R.string.tab_text_1,
-        R.string.tab_text_3
+        R.string.activity_main_tab_title_2,
+        R.string.activity_main_tab_title_1,
+        R.string.activity_main_tab_title_3
     )
 
     override fun getItem(position: Int): Fragment {

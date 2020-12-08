@@ -1,6 +1,6 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory app:title="Localisation" >
+    <PreferenceCategory app:title="Localisation">
 
         <ListPreference
             app:defaultValue="GB"
@@ -24,7 +24,7 @@
         <SwitchPreference
             app:defaultValue="true"
             app:title="Receive Notifications"
-            app:key="notifications"/>
+            app:key="notifications" />
 
         <ListPreference
             app:defaultValue="6"
@@ -43,11 +43,8 @@
 
         <Preference
             android:key="topics"
-            android:title="Topics">
-            <intent
-                android:action="com.laurencerawlings.pollen.ui.account.TopicsActivity"
-                android:targetClass="TopicsActivity" />
-        </Preference>
+            android:title="Topics" />
     </PreferenceCategory>
+
 
 </PreferenceScreen>

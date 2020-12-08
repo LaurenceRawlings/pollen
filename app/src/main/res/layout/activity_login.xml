@@ -22,7 +22,7 @@
         app:layout_constraintBottom_toTopOf="@+id/materialCardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:letterSpacing="0.2"/>
+        android:letterSpacing="0.2" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView"

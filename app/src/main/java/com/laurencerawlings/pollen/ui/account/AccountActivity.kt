@@ -1,23 +1,30 @@
 package com.laurencerawlings.pollen.ui.account
 
 import android.app.Activity
-import android.content.SharedPreferences
+import android.app.AlertDialog
+import android.content.Context
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.MultiSelectListPreference
+import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.dfl.newsapi.enums.Country
 import com.dfl.newsapi.enums.Language
 import com.firebase.ui.auth.AuthUI
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexboxLayoutManager
 import com.laurencerawlings.pollen.R
+import com.laurencerawlings.pollen.adapter.TopicRecyclerAdapter
 import com.laurencerawlings.pollen.api.NewsRepository
 import com.laurencerawlings.pollen.model.User
 import com.laurencerawlings.pollen.ui.Utils
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.layout_topic_picker.view.*
 
 
 class AccountActivity : AppCompatActivity() {
@@ -87,8 +94,13 @@ class AccountActivity : AppCompatActivity() {
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
-            PreferenceManager.getDefaultSharedPreferences(context).registerOnSharedPreferenceChangeListener(listener)
+            PreferenceManager.getDefaultSharedPreferences(context)
+                .registerOnSharedPreferenceChangeListener(listener)
             updateSources()
+
+            findPreference<Preference>("topics")?.setOnPreferenceClickListener {
+                openTopicPickerDialog()
+            }
         }
 
         private fun updateSources() {
@@ -109,6 +121,54 @@ class AccountActivity : AppCompatActivity() {
                         sourcesPreference?.setDefaultValue(sourceIds.toTypedArray())
                     }
                 })
+        }
+
+        private fun openTopicPickerDialog(): Boolean {
+            val inflater =
+                context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val topicPickerLayout: View = inflater.inflate(R.layout.layout_topic_picker, null)
+            val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+
+            builder.setTitle("Topics")
+            builder.setPositiveButton("Ok") { _, _ -> }
+            builder.setView(topicPickerLayout)
+
+            val layoutManager = FlexboxLayoutManager(context)
+            layoutManager.flexDirection = FlexDirection.ROW
+
+            topicPickerLayout.topics.layoutManager = layoutManager
+
+            User.user.topicsObservable.subscribe {
+                val topicAdapter = TopicRecyclerAdapter(it)
+                topicPickerLayout.topics.adapter = topicAdapter
+            }?.let {
+                compositeDisposable.add(
+                    it
+                )
+            }
+
+            topicPickerLayout.topic_add.setOnClickListener {
+                var isValid = false
+                val topic = topicPickerLayout.topic_input.text.toString()
+
+                if (topic.isBlank()) {
+                    topicPickerLayout.topic_input.error = "Topic cannot be blank"
+                } else if (!(topic.all { it.isLetterOrDigit() || it.isWhitespace() })) {
+                    topicPickerLayout.topic_input.error = "Topic must be alphanumeric"
+                } else {
+                    isValid = true
+                }
+
+                if (isValid) {
+                    User.user.addTopic(topic)
+                    topicPickerLayout.topic_input.text?.clear()
+                }
+            }
+
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+
+            return false
         }
     }
 }

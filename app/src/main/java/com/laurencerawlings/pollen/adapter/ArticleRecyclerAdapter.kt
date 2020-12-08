@@ -18,10 +18,10 @@ import com.laurencerawlings.pollen.model.User
 import com.laurencerawlings.pollen.ui.Utils
 import com.laurencerawlings.pollen.ui.main.MainActivity
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.layout_article_popup.view.*
 import kotlinx.android.synthetic.main.layout_article_card.view.*
 import kotlinx.android.synthetic.main.layout_article_card.view.article_headline
 import kotlinx.android.synthetic.main.layout_article_card.view.article_thumbnail
+import kotlinx.android.synthetic.main.layout_article_popup.view.*
 import kotlinx.android.synthetic.main.layout_article_source.view.*
 import java.net.URL
 
@@ -135,7 +135,8 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) :
         }
 
         private fun openPopup(context: Context) {
-            val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater =
+                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
             val builder: AlertDialog.Builder = AlertDialog.Builder(context)
 
@@ -144,19 +145,23 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) :
 
             if (MainActivity.currentArticle != null) {
                 if (MainActivity.currentArticle!!.urlToImage.isNotEmpty()) {
-                    Picasso.get().load(MainActivity.currentArticle!!.urlToImage).fit().centerCrop().into(articleLayout.article_thumbnail)
-                    Picasso.get().load(faviconUrl(MainActivity.currentArticle!!.url)).fit().centerCrop().into(articleLayout.article_source_icon)
+                    Picasso.get().load(MainActivity.currentArticle!!.urlToImage).fit().centerCrop()
+                        .into(articleLayout.article_thumbnail)
+                    Picasso.get().load(faviconUrl(MainActivity.currentArticle!!.url)).fit()
+                        .centerCrop().into(articleLayout.article_source_icon)
                 }
 
                 articleLayout.article_source.text = MainActivity.currentArticle!!.source.name
-                articleLayout.article_time.text = "• " + timeString(MainActivity.currentArticle!!.publishedAt)
+                articleLayout.article_time.text =
+                    "• " + timeString(MainActivity.currentArticle!!.publishedAt)
                 articleLayout.article_headline.text = MainActivity.currentArticle!!.title
                 articleLayout.article_description.text = MainActivity.currentArticle!!.description
             }
 
             builder.setPositiveButton("Close") { _, _ -> }
             builder.setNeutralButton("Read more") { _, _ ->
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(MainActivity.currentArticle!!.url))
+                val browserIntent =
+                    Intent(Intent.ACTION_VIEW, Uri.parse(MainActivity.currentArticle!!.url))
                 startActivity(context, browserIntent, null)
             }
 

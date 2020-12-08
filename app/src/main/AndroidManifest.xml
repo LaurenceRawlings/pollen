@@ -15,23 +15,8 @@
         android:fullBackupContent="@xml/backup_descriptor">
 
         <activity
-            android:name=".ui.account.TopicsActivity"
-            android:label="@string/title_activity_topics"
-            android:parentActivityName=".ui.account.AccountActivity">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.account.AccountActivity" />
-
-            <intent-filter>
-                <action android:name="com.laurencerawlings.pollen.ui.account.TopicsActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name=".ui.bookmarks.BookmarksActivity"
-            android:label="@string/title_activity_bookmarks"
+            android:label="@string/activity_bookmarks_title"
             android:parentActivityName=".ui.main.MainActivity">
 
             <meta-data
@@ -41,7 +26,7 @@
 
         <activity
             android:name=".ui.account.AccountActivity"
-            android:label="@string/title_activity_account"
+            android:label="@string/activity_account_title"
             android:parentActivityName=".ui.main.MainActivity"
             android:theme="@style/PreferenceScreen">
 

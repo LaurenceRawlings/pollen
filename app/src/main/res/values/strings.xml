@@ -1,10 +1,17 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Pollen</string>
-    <string name="tab_text_1">For You</string>
-    <string name="tab_text_2">Headlines</string>
-    <string name="tab_text_3">Everything</string>
-    <string name="title_activity_account">Account Settings</string>
-    <string name="title_activity_bookmarks">Bookmarks</string>
-    <string name="title_activity_article">Article</string>
-    <string name="title_activity_topics">News Topics</string>
+
+    <!--    Main Activity    -->
+    <string name="activity_main_tab_title_1">For You</string>
+    <string name="activity_main_tab_title_2">Headlines</string>
+    <string name="activity_main_tab_title_3">Everything</string>
+
+    <!--    Account Activity    -->
+    <string name="activity_account_title">Account Preferences</string>
+
+    <!--    Bookmarks Activity    -->
+    <string name="activity_bookmarks_title">Bookmarks</string>
+
+    <!--    Topics Activity    -->
+    <string name="activity_topics_title">News Topics</string>
 </resources>

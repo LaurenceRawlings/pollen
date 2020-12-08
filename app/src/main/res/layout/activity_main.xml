@@ -28,7 +28,7 @@
                 android:letterSpacing="0.4"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:textSize="25sp"/>
+                android:textSize="25sp" />
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:minHeight="?actionBarSize"
                 android:layout_centerVertical="true"
-                app:theme="@style/Theme.MaterialComponents.Dialog"/>
+                app:theme="@style/Theme.MaterialComponents.Dialog" />
         </RelativeLayout>
 
 

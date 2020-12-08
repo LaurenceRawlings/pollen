@@ -31,8 +31,13 @@ class NewsNotification : BroadcastReceiver() {
         fun schedule(context: Context, intentActivity: Activity, delay: Long) {
             val futureInMillis: Long = SystemClock.elapsedRealtime() + delay
 
-            val manager = intentActivity.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val channel = NotificationChannel(NOTIFICATION_CHANNEL, NOTIFICATION_CHANNEL, NotificationManager.IMPORTANCE_DEFAULT)
+            val manager =
+                intentActivity.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val channel = NotificationChannel(
+                NOTIFICATION_CHANNEL,
+                NOTIFICATION_CHANNEL,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
 
             manager.createNotificationChannel(channel)
 
@@ -45,7 +50,8 @@ class NewsNotification : BroadcastReceiver() {
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
 
             val intent = Intent(context, intentActivity::class.java)
-            val activity = PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+            val activity =
+                PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT)
 
             builder.setContentIntent(activity)
 
@@ -55,8 +61,14 @@ class NewsNotification : BroadcastReceiver() {
             notificationIntent.putExtra(NOTIFICATION_ID, 1)
             notificationIntent.putExtra(NOTIFICATION, notification)
 
-            val pendingIntent = PendingIntent.getBroadcast(context, 1, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT)
-            val alarmManager = intentActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val pendingIntent = PendingIntent.getBroadcast(
+                context,
+                1,
+                notificationIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT
+            )
+            val alarmManager =
+                intentActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
             alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent)
         }

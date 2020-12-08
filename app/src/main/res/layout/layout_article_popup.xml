@@ -28,7 +28,7 @@
                 android:id="@+id/article_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"/>
+                android:layout_marginStart="5dp" />
 
         </com.google.android.material.circularreveal.CircularRevealLinearLayout>
 
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorOnPrimary"
             android:textSize="20sp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/article_description"
