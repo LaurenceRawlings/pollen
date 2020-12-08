@@ -55,7 +55,7 @@ class MainFragment : Fragment() {
         super.onResume()
         if (!mainViewModel.isUpdated()) {
             if (arguments?.getInt(ARG_TAB_NUMBER) == 1) {
-                val topics = User.user?.topics
+                val topics = User.user.topics
                 if (topics.isNullOrEmpty()) {
                     topics_error.visibility = View.VISIBLE
                     recycler_view.visibility = View.GONE

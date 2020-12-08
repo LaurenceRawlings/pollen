@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.MultiSelectListPreference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
+import com.dfl.newsapi.enums.Country
+import com.dfl.newsapi.enums.Language
 import com.firebase.ui.auth.AuthUI
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.api.NewsRepository
@@ -30,7 +32,7 @@ class AccountActivity : AppCompatActivity() {
         AuthUI.getInstance()
             .signOut(this)
             .addOnCompleteListener {
-                User.updateUser(this)
+                User.updateUser()
                 Utils.showSnackbar("Logged out", view)
                 setResult(Activity.RESULT_FIRST_USER)
                 finish()
@@ -54,24 +56,27 @@ class AccountActivity : AppCompatActivity() {
             PreferenceManager.getDefaultSharedPreferences(context)
                 .registerOnSharedPreferenceChangeListener { preferences, key ->
                     when (key) {
-                        "topics" -> {
-                            NewsRepository.forYouFeedUpdated = false
-                        }
                         "sources" -> {
                             User.user.setSources(
                                 preferences.getStringSet("sources", null)?.toTypedArray()!!
                             )
-                            NewsRepository.updateAllFeeds()
                         }
                         "country" -> {
-                            User.user.setCountry(preferences.getString("country", "GB")!!)
-                            NewsRepository.headlineFeedUpdated = false
+                            User.user.setCountry(
+                                preferences.getString(
+                                    "country",
+                                    Country.GB.toString()
+                                )!!
+                            )
                             updateSources()
                         }
                         "language" -> {
-                            User.user.setLanguage(preferences.getString("language", "EN")!!)
-                            NewsRepository.forYouFeedUpdated = false
-                            NewsRepository.everythingFeedUpdated = false
+                            User.user.setLanguage(
+                                preferences.getString(
+                                    "language",
+                                    Language.EN.toString()
+                                )!!
+                            )
                             updateSources()
                         }
                     }

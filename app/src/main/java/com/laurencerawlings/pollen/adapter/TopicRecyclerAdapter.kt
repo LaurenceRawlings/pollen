@@ -39,7 +39,7 @@ class TopicRecyclerAdapter(topics: List<String>) : RecyclerView.Adapter<Recycler
             topicChip.text = topic
 
             topicChip.setOnCloseIconClickListener {
-                User.user?.removeTopic(topic)
+                User.user.removeTopic(topic)
             }
         }
     }

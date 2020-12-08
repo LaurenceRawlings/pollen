@@ -37,12 +37,11 @@ class User(
             return "${url.host?.replace(".", "-")}-${url.lastPathSegment}"
         }
 
-        fun updateUser(context: Context, callback: (() -> Unit)? = null) {
-            user = if (Firebase.auth.currentUser != null) {
-                User(
+        fun updateUser(callback: (() -> Unit)? = null) {
+            if (Firebase.auth.currentUser != null) {
+                user = User(
                     Firebase.auth.currentUser!!.uid,
                     Firebase.auth.currentUser!!.displayName,
-                    context
                 ) {
                     if (callback != null) {
                         callback()
@@ -51,7 +50,13 @@ class User(
                     }
                 }
             } else {
-                anonUser
+                user = anonUser
+
+                if (callback != null) {
+                    callback()
+                } else {
+                    NewsRepository.updateAllFeeds()
+                }
             }
         }
 
@@ -64,7 +69,6 @@ class User(
     var sources: ArrayList<String> = ArrayList()
 
     private lateinit var userRef: DocumentReference
-    private lateinit var localPreferences: SharedPreferences
     lateinit var topicsObservable: BehaviorSubject<ArrayList<String>>
     private val compositeDisposable = CompositeDisposable()
 
@@ -77,20 +81,13 @@ class User(
             })
     }
 
-    constructor(id: String, name: String?, context: Context, callback: () -> Unit) : this() {
+    constructor(id: String, name: String?, callback: () -> Unit) : this() {
         this.id = id
         if (name != null) {
             this.name = name
         }
         userRef = db.collection("users").document(id)
-        localPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         topicsObservable = BehaviorSubject.create()
-
-        val topicsString = localPreferences.getString("topics", null)
-
-        if (!topicsString.isNullOrBlank()) {
-            topics = topicsString.split(",").map { it.trim() } as ArrayList<String>
-        }
 
         userRef.addSnapshotListener { snapshot, _ ->
             if (snapshot != null) {
@@ -120,10 +117,6 @@ class User(
             )
         } else {
             topics = snapshot.data?.get("topics") as? ArrayList<String> ?: ArrayList()
-            with(localPreferences.edit()) {
-                putString("topics", topics.joinToString(","))
-                apply()
-            }
 
             sources = snapshot.data?.get("sources") as? ArrayList<String> ?: ArrayList()
             val countryString = snapshot.data?.get("country") as String
@@ -131,6 +124,7 @@ class User(
 
             country = Country.valueOf(countryString)
             language = Language.valueOf(languageString)
+
             topicsObservable.onNext(topics)
         }
     }
@@ -141,7 +135,6 @@ class User(
         }
     }
 
-    // TODO: Require auth
     fun getBookmarks(): CollectionReference? {
         return if (isAuthed()) {
             userRef.collection("bookmarks")
@@ -160,21 +153,27 @@ class User(
 
     fun addTopic(topic: String) = requireAuth {
         userRef.update("topics", FieldValue.arrayUnion(topic))
+        NewsRepository.forYouFeedUpdated = false
     }
 
     fun removeTopic(topic: String) = requireAuth {
         userRef.update("topics", FieldValue.arrayRemove(topic))
+        NewsRepository.forYouFeedUpdated = false
     }
 
     fun setSources(sources: Array<String>) = requireAuth {
         userRef.update("sources", sources.toList())
+        NewsRepository.updateAllFeeds()
     }
 
     fun setCountry(country: String) = requireAuth {
         userRef.update("country", country)
+        NewsRepository.headlineFeedUpdated = false
     }
 
     fun setLanguage(language: String) = requireAuth {
         userRef.update("language", language)
+        NewsRepository.forYouFeedUpdated = false
+        NewsRepository.everythingFeedUpdated = false
     }
 }

@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        User.updateUser(this) { setupTabs() }
+        User.updateUser { setupTabs() }
 
         RxJavaPlugins.setErrorHandler(Throwable::printStackTrace)
     }
@@ -76,14 +76,14 @@ class MainActivity : AppCompatActivity() {
                 Utils.showSnackbar("Log in failed!", findViewById(R.id.content))
             }
 
-            User.updateUser(this)
+            User.updateUser()
+            refreshActivity()
         } else if (requestCode == RequestCodes.SETTINGS.code) {
             IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_FIRST_USER) {
                 NewsRepository.updateAllFeeds()
-                finish();
-                startActivity(intent)
+                refreshActivity()
             }
         }
     }
@@ -119,6 +119,11 @@ class MainActivity : AppCompatActivity() {
         viewPager.offscreenPageLimit = 2
         viewPager.currentItem = 1
         tabs.setupWithViewPager(viewPager)
+    }
+
+    private fun refreshActivity() {
+        finish()
+        startActivity(intent)
     }
 
     private fun openAccountActivity() {
