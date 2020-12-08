@@ -24,9 +24,7 @@ class TopicRecyclerAdapter(topics: List<String>) : RecyclerView.Adapter<Recycler
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is TopicRecyclerAdapter.TopicViewHolder -> {
-                holder.bind(items[position])
-            }
+            is TopicRecyclerAdapter.TopicViewHolder -> holder.bind(items[position])
         }
     }
 

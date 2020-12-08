@@ -19,10 +19,7 @@ class NewsNotification : BroadcastReceiver() {
         val notification: Notification? = intent!!.getParcelableExtra(NOTIFICATION)
         val notificationId = intent.getIntExtra(NOTIFICATION_ID, 0)
 
-        NewsRepository.headlineFeedUpdated = false
-        NewsRepository.forYouFeedUpdated = false
-        NewsRepository.everythingFeedUpdated = false
-
+        NewsRepository.updateAllFeeds()
         notificationManager.notify(notificationId, notification)
     }
 
@@ -30,10 +27,6 @@ class NewsNotification : BroadcastReceiver() {
         private const val NOTIFICATION_ID = "notification_id"
         private const val NOTIFICATION = "notification"
         private const val NOTIFICATION_CHANNEL = "pollen"
-
-        init {
-
-        }
 
         fun schedule(context: Context, intentActivity: Activity, delay: Long) {
             val futureInMillis: Long = SystemClock.elapsedRealtime() + delay

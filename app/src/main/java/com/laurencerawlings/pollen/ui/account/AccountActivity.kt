@@ -1,5 +1,6 @@
 package com.laurencerawlings.pollen.ui.account
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +32,7 @@ class AccountActivity : AppCompatActivity() {
             .addOnCompleteListener {
                 User.updateUser(this)
                 Utils.showSnackbar("Logged out", view)
+                setResult(Activity.RESULT_FIRST_USER)
                 finish()
             }
     }
@@ -56,20 +58,18 @@ class AccountActivity : AppCompatActivity() {
                             NewsRepository.forYouFeedUpdated = false
                         }
                         "sources" -> {
-                            User.user?.setSources(
+                            User.user.setSources(
                                 preferences.getStringSet("sources", null)?.toTypedArray()!!
                             )
-                            NewsRepository.headlineFeedUpdated = false
-                            NewsRepository.forYouFeedUpdated = false
-                            NewsRepository.everythingFeedUpdated = false
+                            NewsRepository.updateAllFeeds()
                         }
                         "country" -> {
-                            User.user?.setCountry(preferences.getString("country", "GB")!!)
+                            User.user.setCountry(preferences.getString("country", "GB")!!)
                             NewsRepository.headlineFeedUpdated = false
                             updateSources()
                         }
                         "language" -> {
-                            User.user?.setLanguage(preferences.getString("language", "EN")!!)
+                            User.user.setLanguage(preferences.getString("language", "EN")!!)
                             NewsRepository.forYouFeedUpdated = false
                             NewsRepository.everythingFeedUpdated = false
                             updateSources()

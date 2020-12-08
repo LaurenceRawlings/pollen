@@ -15,12 +15,18 @@ class NewsRepository {
         var forYouFeedUpdated = false
         var everythingFeedUpdated = false
 
+        fun updateAllFeeds() {
+            headlineFeedUpdated = false
+            forYouFeedUpdated = false
+            everythingFeedUpdated = false
+        }
+
         fun getPersonalNews(): Single<ArticlesDto> {
             forYouFeedUpdated = true
             return newsApiRepository.getEverything(
-                q = User.user?.topics?.joinToString(" OR "),
-                sources = User.user?.sources?.joinToString(","),
-                language = User.user?.language,
+                q = User.user.topics.joinToString(" OR "),
+                sources = User.user.sources.joinToString(","),
+                language = User.language,
                 sortBy = SortBy.PUBLISHED_AT,
                 pageSize = 100,
                 page = 1
@@ -30,7 +36,7 @@ class NewsRepository {
         fun getHeadlines(): Single<ArticlesDto> {
             headlineFeedUpdated = true
             return newsApiRepository.getTopHeadlines(
-                sources = User.user?.sources?.joinToString(","),
+                sources = User.user.sources.joinToString(","),
                 pageSize = 100,
                 page = 1
             )
@@ -39,8 +45,8 @@ class NewsRepository {
         fun getAllNews(): Single<ArticlesDto> {
             everythingFeedUpdated = true
             return newsApiRepository.getEverything(
-                sources = User.user?.sources?.joinToString(","),
-                language = User.user?.language,
+                sources = User.user.sources.joinToString(","),
+                language = User.language,
                 sortBy = SortBy.PUBLISHED_AT,
                 pageSize = 100,
                 page = 1
@@ -49,8 +55,8 @@ class NewsRepository {
 
         fun getSources(): Single<SourcesDto> {
             return newsApiRepository.getSources(
-                country = User.user?.country,
-                language = User.user?.language
+                country = User.country,
+                language = User.language
             )
         }
     }

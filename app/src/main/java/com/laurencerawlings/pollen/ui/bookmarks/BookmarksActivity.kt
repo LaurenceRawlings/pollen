@@ -24,7 +24,7 @@ class BookmarksActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        User.user?.getBookmarks()?.orderBy("publishedAt", Query.Direction.DESCENDING)?.get()
+        User.user.getBookmarks()?.orderBy("publishedAt", Query.Direction.DESCENDING)?.get()
             ?.addOnSuccessListener { bookmarks ->
                 this.runOnUiThread {
                     val bookmarkList = ArrayList<ArticleDto>()

@@ -23,7 +23,10 @@ class ArticleActivity : AppCompatActivity() {
         if (currentArticle != null) {
             supportActionBar?.title = currentArticle!!.source.name
 
-            Picasso.get().load(currentArticle!!.urlToImage).into(article_thumbnail)
+            if (!currentArticle!!.urlToImage.isNullOrEmpty()) {
+                Picasso.get().load(currentArticle!!.urlToImage).into(article_thumbnail)
+            }
+
             article_headline.text = currentArticle!!.title
             article_description.text = currentArticle!!.description
 

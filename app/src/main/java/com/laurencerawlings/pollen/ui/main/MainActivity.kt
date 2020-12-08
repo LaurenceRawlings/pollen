@@ -15,6 +15,7 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.tabs.TabLayout
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.adapter.MainTabAdapter
+import com.laurencerawlings.pollen.api.NewsRepository
 import com.laurencerawlings.pollen.model.User
 import com.laurencerawlings.pollen.receivers.NewsNotification
 import com.laurencerawlings.pollen.ui.Utils
@@ -53,9 +54,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        setupTabs()
-
-        User.updateUser(this)
+        User.updateUser(this) { setupTabs() }
 
         RxJavaPlugins.setErrorHandler(Throwable::printStackTrace)
     }
@@ -73,10 +72,18 @@ class MainActivity : AppCompatActivity() {
 
             if (resultCode == Activity.RESULT_OK) {
                 Utils.showSnackbar("Logged in!", findViewById(R.id.content))
-                User.updateUser(this)
             } else {
                 Utils.showSnackbar("Log in failed!", findViewById(R.id.content))
-                User.user = null
+            }
+
+            User.updateUser(this)
+        } else if (requestCode == RequestCodes.SETTINGS.code) {
+            IdpResponse.fromResultIntent(data)
+
+            if (resultCode == Activity.RESULT_FIRST_USER) {
+                NewsRepository.updateAllFeeds()
+                finish();
+                startActivity(intent)
             }
         }
     }

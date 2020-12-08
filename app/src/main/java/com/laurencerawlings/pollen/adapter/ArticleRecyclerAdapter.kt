@@ -35,9 +35,7 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ArticleViewHolder -> {
-                holder.bind(items[position])
-            }
+            is ArticleViewHolder -> holder.bind(items[position])
         }
     }
 
@@ -59,8 +57,10 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) :
             source.text = article.source.name
             headline.text = article.title
 
-            Picasso.get().load(article.urlToImage).fit().centerCrop().into(thumbnail)
-            Picasso.get().load("http://" + URL(article.url).host + "/favicon.ico").into(sourceIcon)
+            if (!article.urlToImage.isNullOrEmpty()) {
+                Picasso.get().load(article.urlToImage).fit().centerCrop().into(thumbnail)
+                Picasso.get().load("http://" + URL(article.url).host + "/favicon.ico").into(sourceIcon)
+            }
 
             val hours = Utils.hoursPassed(article.publishedAt)
 
@@ -79,16 +79,16 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) :
             setBookmarked(article, bookmarked)
 
             bookmarked.setOnClickListener {
-                if (User.user != null) {
+                if (User.isAuthed()) {
                     if (bookmarked.isChecked) {
-                        User.user!!.addBookmark(article)
+                        User.user.addBookmark(article)
                         Utils.showSnackbar("Bookmark added", it)
                     } else {
-                        User.user!!.removeBookmark(article)
+                        User.user.removeBookmark(article)
                         Utils.showSnackbar("Bookmark removed", it)
                     }
                 } else {
-                    Utils.showSnackbar("You must be signed in to ic_bookmark articles!", it)
+                    Utils.showSnackbar("Sign in to bookmark articles", it)
                     bookmarked.isChecked = false
                 }
 
@@ -112,14 +112,10 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) :
         }
 
         private fun setBookmarked(article: ArticleDto, checkBox: CheckBox) {
-            if (User.user != null) {
-                val bookmarkRef = User.user!!.getBookmarks().document(User.articleKey(article))
-                bookmarkRef.get().addOnSuccessListener {
+            User.user.getBookmarks()?.document(User.articleKey(article))?.get()
+                ?.addOnSuccessListener {
                     checkBox.isChecked = it.exists()
                 }
-            } else {
-                checkBox.isChecked = false
-            }
         }
     }
 }

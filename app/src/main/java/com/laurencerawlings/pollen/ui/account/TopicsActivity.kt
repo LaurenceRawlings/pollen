@@ -26,7 +26,7 @@ class TopicsActivity : AppCompatActivity() {
 
         topics.layoutManager = layoutManager
 
-        User.user?.topicsObservable?.subscribe {
+        User.user.topicsObservable.subscribe {
             updateTopics(it)
         }?.let {
             compositeDisposable.add(
@@ -53,7 +53,7 @@ class TopicsActivity : AppCompatActivity() {
         }
 
         if (isValid) {
-            User.user?.addTopic(topic)
+            User.user.addTopic(topic)
             topic_input.text?.clear()
         }
     }
