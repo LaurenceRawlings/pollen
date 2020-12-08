@@ -21,8 +21,9 @@ class User(
     var name: String = "Anonymous"
 ) {
     companion object {
-        val db = Firebase.firestore
+        private val db = Firebase.firestore
         private val anonUser = User()
+
         var user: User = anonUser
 
         var country: Country = Country.GB
@@ -145,6 +146,7 @@ class User(
 
     fun removeBookmark(article: ArticleDto) = requireAuth {
         getBookmarks()?.document(articleKey(article))?.delete()
+        NewsRepository.updateAllFeeds()
     }
 
     fun addTopic(topic: String) = requireAuth {

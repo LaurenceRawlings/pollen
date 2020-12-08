@@ -43,8 +43,8 @@ class NewsNotification : BroadcastReceiver() {
 
 
             val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL)
-                .setContentTitle("New News")
-                .setContentText("You have new news stories to check out!")
+                .setContentTitle("News Alert")
+                .setContentText("You have new stories to check out!")
                 .setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))

@@ -9,7 +9,7 @@ import io.reactivex.Single
 
 class NewsRepository {
     companion object {
-        private val newsApiRepository = NewsApiRepository("e4d6e296153f46c6993bb300c245463a")
+        private val newsApiRepository = NewsApiRepository("f4762581da6d4da2b887b83392495fcd")
 
         var headlineFeedUpdated = false
         var forYouFeedUpdated = false
