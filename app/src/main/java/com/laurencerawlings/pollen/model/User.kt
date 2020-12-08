@@ -12,7 +12,6 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.laurencerawlings.pollen.api.NewsRepository
 import io.reactivex.subjects.BehaviorSubject
 
 class User(val id: String, val name: String?, val context: Context) {
@@ -32,7 +31,7 @@ class User(val id: String, val name: String?, val context: Context) {
         val topicsString = localPreferences.getString("topics", null)
 
         if (!topicsString.isNullOrBlank()) {
-            topics = topicsString.split(",")?.map { it.trim() } as ArrayList<String>
+            topics = topicsString.split(",").map { it.trim() } as ArrayList<String>
         }
 
         userRef.addSnapshotListener { snapshot, e ->
@@ -64,29 +63,6 @@ class User(val id: String, val name: String?, val context: Context) {
                     topicsObservable.onNext(topics)
                 }
             }
-
-            localPreferences.registerOnSharedPreferenceChangeListener { _, key ->
-                when (key) {
-                    "topics" -> {
-                        NewsRepository.personalUpdated = false
-                    }
-                    "sources" -> {
-                        user?.setSources(localPreferences.getStringSet("sources", null)?.toTypedArray()!!)
-                        NewsRepository.headlinesUpdated = false
-                        NewsRepository.personalUpdated = false
-                        NewsRepository.allUpdated = false
-                    }
-                    "country" -> {
-                        user?.setCountry(localPreferences.getString("country", "GB")!!)
-                        NewsRepository.headlinesUpdated = false
-                    }
-                    "language" -> {
-                        user?.setLanguage(localPreferences.getString("language", "EN")!!)
-                        NewsRepository.personalUpdated = false
-                        NewsRepository.allUpdated = false
-                    }
-                }
-            }
         }
     }
 
@@ -114,11 +90,11 @@ class User(val id: String, val name: String?, val context: Context) {
         userRef.update("sources", sources.toList())
     }
 
-    private fun setCountry(country: String) {
+    fun setCountry(country: String) {
         userRef.update("country", country)
     }
 
-    private fun setLanguage(language: String) {
+    fun setLanguage(language: String) {
         userRef.update("language", language)
     }
 

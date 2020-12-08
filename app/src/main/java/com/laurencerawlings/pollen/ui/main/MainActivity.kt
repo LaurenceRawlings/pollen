@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.preference.PreferenceManager
@@ -22,6 +22,7 @@ import com.laurencerawlings.pollen.model.User
 import com.laurencerawlings.pollen.ui.account.AccountActivity
 import com.laurencerawlings.pollen.ui.bookmarks.BookmarksActivity
 import com.laurencerawlings.pollen.receivers.NewsNotification
+import com.laurencerawlings.pollen.ui.Utils
 import io.reactivex.plugins.RxJavaPlugins
 import java.util.*
 
@@ -95,16 +96,10 @@ class MainActivity : AppCompatActivity() {
             IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_OK) {
-                val myToast = Toast.makeText(applicationContext, "Logged in!", Toast.LENGTH_SHORT)
-                myToast.show()
+                Utils.showSnackbar("Logged in!", findViewById(R.id.content))
                 User.updateUser(this)
             } else {
-                val myToast = Toast.makeText(
-                    applicationContext,
-                    "Log in failed!",
-                    Toast.LENGTH_SHORT
-                )
-                myToast.show()
+                Utils.showSnackbar("Logged in failed!", findViewById(R.id.content))
                 User.user = null
             }
         }
@@ -126,6 +121,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    fun topics(view: View) {
+        account()
     }
 
     private fun account() {

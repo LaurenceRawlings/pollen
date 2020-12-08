@@ -12,6 +12,7 @@ import com.dfl.newsapi.model.ArticleDto
 import com.google.android.material.snackbar.Snackbar
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.model.User
+import com.laurencerawlings.pollen.ui.Utils
 import com.laurencerawlings.pollen.ui.article.ArticleActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.layout_article_card.view.*
@@ -85,15 +86,13 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) : RecyclerView.Adapter<
                 if (User.user != null) {
                     if (bookmarked.isChecked) {
                         User.user!!.addBookmark(article)
+                        Utils.showSnackbar("Bookmark added", it)
                     } else {
                         User.user!!.removeBookmark(article)
+                        Utils.showSnackbar("Bookmark removed", it)
                     }
                 } else {
-                    Snackbar.make(
-                        it,
-                        "You must be signed in to bookmark articles...",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                    Utils.showSnackbar("You must be signed in to bookmark articles!", it)
                     bookmarked.isChecked = false
                 }
 
