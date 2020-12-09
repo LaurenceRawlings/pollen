@@ -74,9 +74,9 @@ class MainActivity : AppCompatActivity() {
             IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_OK) {
-                Utils.showSnackbar("Logged in!", findViewById(R.id.content))
+                Utils.showSnackbar(getString(R.string.message_logged_in), findViewById(R.id.content))
             } else {
-                Utils.showSnackbar("Log in failed!", findViewById(R.id.content))
+                Utils.showSnackbar(getString(R.string.message_log_in_failed), findViewById(R.id.content))
             }
 
             User.updateUser()
@@ -166,8 +166,9 @@ class MainActivity : AppCompatActivity() {
     private fun scheduleNotification() {
         val localPreferences = PreferenceManager.getDefaultSharedPreferences(this)
 
-        if (localPreferences.getBoolean("notifications", true)) {
-            val delayHours = localPreferences.getString("notification-interval", "6")!!.toLong()
+        if (localPreferences.getBoolean(getString(R.string.preferences_key_notifications), true)) {
+            val delayHours = localPreferences.getString(getString(R.string.preferences_key_notification_interval), getString(
+                            R.string.preferences_default_notifications))!!.toLong()
             val delayMilliseconds = delayHours.times(3600000)
 
             val calendar = Calendar.getInstance()

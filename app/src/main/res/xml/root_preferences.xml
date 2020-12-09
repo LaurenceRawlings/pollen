@@ -1,49 +1,49 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory app:title="Localisation">
+    <PreferenceCategory app:title="@string/preferences_title_localisation">
 
         <ListPreference
-            app:defaultValue="GB"
+            app:defaultValue="@string/preferences_default_country"
             app:entries="@array/countries"
             app:entryValues="@array/countries"
-            app:key="country"
-            app:title="Country"
+            app:key="@string/preferences_key_country"
+            app:title="@string/preferences_title_country"
             app:useSimpleSummaryProvider="true" />
 
         <ListPreference
-            app:defaultValue="EN"
+            app:defaultValue="@string/preferences_default_language"
             app:entries="@array/languages"
             app:entryValues="@array/languages"
-            app:key="language"
-            app:title="Language"
+            app:key="@string/preferences_key_language"
+            app:title="@string/preferences_title_language"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Notifications">
+    <PreferenceCategory app:title="@string/preferences_title_notifications">
         <SwitchPreference
             app:defaultValue="true"
-            app:key="notifications"
-            app:title="Receive Notifications" />
+            app:key="@string/preferences_key_notifications"
+            app:title="@string/preferences_title_receive_notifications" />
 
         <ListPreference
             android:entries="@array/notificationIntervals"
             android:entryValues="@array/notificationIntervalValues"
-            android:title="Alert Interval"
-            app:defaultValue="6"
-            app:key="notification-interval"
+            android:title="@string/preferences_title_notification_interval"
+            app:defaultValue="@string/preferences_key_notification_interval"
+            app:key="@string/preferences_key_notification_interval"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="News">
+    <PreferenceCategory app:title="@string/preferences_title_news">
         <MultiSelectListPreference
-            app:key="sources"
-            app:title="Sources" />
+            app:key="@string/preferences_key_sources"
+            app:title="@string/preferences_title_sources" />
 
         <Preference
-            android:key="topics"
-            android:title="Topics" />
+            android:key="@string/preferences_key_topics"
+            android:title="@string/preferences_title_topics" />
     </PreferenceCategory>
 
 

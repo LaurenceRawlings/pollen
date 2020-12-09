@@ -19,8 +19,8 @@ import com.laurencerawlings.pollen.ui.Utils
 import com.laurencerawlings.pollen.ui.main.MainActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.layout_article_card.view.*
-import kotlinx.android.synthetic.main.layout_article_card.view.article_headline
-import kotlinx.android.synthetic.main.layout_article_card.view.article_thumbnail
+import kotlinx.android.synthetic.main.layout_article_card.view.article_card_title
+import kotlinx.android.synthetic.main.layout_article_card.view.article_card_image
 import kotlinx.android.synthetic.main.layout_article_popup.view.*
 import kotlinx.android.synthetic.main.layout_article_source.view.*
 import java.net.URL
@@ -52,25 +52,25 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) :
     }
 
     inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val thumbnail: ImageView = itemView.article_thumbnail
-        private val sourceIcon: ImageView = itemView.article_source_icon
-        private val source: TextView = itemView.article_source
-        private val headline = itemView.article_headline
-        private val details = itemView.article_details
-        private val bookmarked = itemView.bookmark
-        private val share = itemView.share_article
-        private val card = itemView.article_card
+        private val image: ImageView = itemView.article_card_image
+        private val sourceFavicon: ImageView = itemView.article_source_icon
+        private val sourceName: TextView = itemView.article_source
+        private val title = itemView.article_card_title
+        private val time = itemView.article_card_time
+        private val bookmarked = itemView.article_card_bookmarked
+        private val share = itemView.article_card_share
+        private val container = itemView.article_card
 
         fun bind(article: ArticleDto) {
-            source.text = article.source.name
-            headline.text = article.title
+            sourceName.text = article.source.name
+            title.text = article.title
 
             if (!article.urlToImage.isNullOrEmpty()) {
-                Picasso.get().load(article.urlToImage).fit().centerCrop().into(thumbnail)
-                Picasso.get().load(faviconUrl(article.url)).fit().centerCrop().into(sourceIcon)
+                Picasso.get().load(article.urlToImage).fit().centerCrop().into(image)
+                Picasso.get().load(faviconUrl(article.url)).fit().centerCrop().into(sourceFavicon)
             }
 
-            details.text = timeString(article.publishedAt)
+            time.text = timeString(article.publishedAt)
 
             setBookmarked(article, bookmarked)
 
@@ -78,13 +78,13 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) :
                 if (User.isAuthed()) {
                     if (bookmarked.isChecked) {
                         User.user.addBookmark(article)
-                        Utils.showSnackbar("Bookmark added", it)
+                        Utils.showSnackbar(itemView.context.getString(R.string.message_bookmark_added), it)
                     } else {
                         User.user.removeBookmark(article)
-                        Utils.showSnackbar("Bookmark removed", it)
+                        Utils.showSnackbar(itemView.context.getString(R.string.message_bookmark_removed), it)
                     }
                 } else {
-                    Utils.showSnackbar("Sign in to bookmark articles", it)
+                    Utils.showSnackbar(itemView.context.getString(R.string.message_bookmark_sign_in), it)
                     bookmarked.isChecked = false
                 }
 
@@ -101,9 +101,9 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) :
                 it.context.startActivity(shareIntent)
             }
 
-            card.setOnClickListener {
+            container.setOnClickListener {
                 MainActivity.currentArticle = article
-                openPopup(it.context)
+                openArticleDialog(it.context)
             }
         }
 
@@ -112,13 +112,13 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) :
 
             return when {
                 hours < 1 -> {
-                    "now"
+                    itemView.context.getString(R.string.time_now)
                 }
                 hours >= 24 -> {
-                    "${hours / 24}d ago"
+                    itemView.context.getString(R.string.time_days).format(hours / 24)
                 }
                 else -> {
-                    "${hours}h ago"
+                    itemView.context.getString(R.string.time_hours).format(hours)
                 }
             }
         }
@@ -134,32 +134,30 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) :
                 }
         }
 
-        private fun openPopup(context: Context) {
+        private fun openArticleDialog(context: Context) {
             val inflater =
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-
             val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-
             val articleLayout: View = inflater.inflate(R.layout.layout_article_popup, null)
+
             builder.setView(articleLayout)
 
             if (MainActivity.currentArticle != null) {
                 if (MainActivity.currentArticle!!.urlToImage.isNotEmpty()) {
                     Picasso.get().load(MainActivity.currentArticle!!.urlToImage).fit().centerCrop()
-                        .into(articleLayout.article_thumbnail)
+                        .into(articleLayout.article_popup_image)
                     Picasso.get().load(faviconUrl(MainActivity.currentArticle!!.url)).fit()
                         .centerCrop().into(articleLayout.article_source_icon)
                 }
 
                 articleLayout.article_source.text = MainActivity.currentArticle!!.source.name
-                articleLayout.article_time.text =
-                    "• " + timeString(MainActivity.currentArticle!!.publishedAt)
-                articleLayout.article_headline.text = MainActivity.currentArticle!!.title
-                articleLayout.article_description.text = MainActivity.currentArticle!!.description
+                articleLayout.article_popup_time.text = context.getString(R.string.article_dialog_time).format(timeString(MainActivity.currentArticle!!.publishedAt))
+                articleLayout.article_popup_title.text = MainActivity.currentArticle!!.title
+                articleLayout.article_popup_description.text = MainActivity.currentArticle!!.description
             }
 
-            builder.setPositiveButton("Close") { _, _ -> }
-            builder.setNeutralButton("Read more") { _, _ ->
+            builder.setPositiveButton(context.getString(R.string.article_dialog_close)) { _, _ -> }
+            builder.setNeutralButton(context.getString(R.string.article_dialog_read_more)) { _, _ ->
                 val browserIntent =
                     Intent(Intent.ACTION_VIEW, Uri.parse(MainActivity.currentArticle!!.url))
                 startActivity(context, browserIntent, null)

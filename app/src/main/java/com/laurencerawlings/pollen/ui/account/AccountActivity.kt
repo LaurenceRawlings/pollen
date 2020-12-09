@@ -43,7 +43,7 @@ class AccountActivity : AppCompatActivity() {
             .signOut(this)
             .addOnCompleteListener {
                 User.updateUser()
-                Utils.showSnackbar("Logged out", view)
+                Utils.showSnackbar(getString(R.string.message_logged_out), view)
                 setResult(Activity.RESULT_FIRST_USER)
                 finish()
             }
@@ -65,24 +65,24 @@ class AccountActivity : AppCompatActivity() {
             listener =
                 OnSharedPreferenceChangeListener { preferences, key ->
                     when (key) {
-                        "sources" -> {
+                        getString(R.string.preferences_key_sources) -> {
                             User.user.setSources(
-                                preferences.getStringSet("sources", null)?.toTypedArray()!!
+                                preferences.getStringSet(getString(R.string.preferences_key_sources), null)?.toTypedArray()!!
                             )
                         }
-                        "country" -> {
+                        getString(R.string.preferences_key_country) -> {
                             User.user.setCountry(
                                 preferences.getString(
-                                    "country",
+                                    getString(R.string.preferences_key_country),
                                     Country.GB.toString()
                                 )!!
                             )
                             updateSources()
                         }
-                        "language" -> {
+                        getString(R.string.preferences_key_language) -> {
                             User.user.setLanguage(
                                 preferences.getString(
-                                    "language",
+                                    getString(R.string.preferences_key_language),
                                     Language.EN.toString()
                                 )!!
                             )
@@ -98,7 +98,7 @@ class AccountActivity : AppCompatActivity() {
                 .registerOnSharedPreferenceChangeListener(listener)
             updateSources()
 
-            findPreference<Preference>("topics")?.setOnPreferenceClickListener {
+            findPreference<Preference>(getString(R.string.preferences_key_topics))?.setOnPreferenceClickListener {
                 openTopicPickerDialog()
             }
         }
@@ -109,7 +109,7 @@ class AccountActivity : AppCompatActivity() {
                     activity?.runOnUiThread {
                         val sourceNames = ArrayList<String>()
                         val sourceIds = ArrayList<String>()
-                        val sourcesPreference = findPreference<MultiSelectListPreference>("sources")
+                        val sourcesPreference = findPreference<MultiSelectListPreference>(getString(R.string.preferences_key_sources))
 
                         sources.sources.map {
                             sourceNames.add(it.name)
@@ -129,8 +129,8 @@ class AccountActivity : AppCompatActivity() {
             val topicPickerLayout: View = inflater.inflate(R.layout.layout_topic_picker, null)
             val builder: AlertDialog.Builder = AlertDialog.Builder(context)
 
-            builder.setTitle("Topics")
-            builder.setPositiveButton("Ok") { _, _ -> }
+            builder.setTitle(getString(R.string.topics_dialog_title))
+            builder.setPositiveButton(getString(R.string.topics_dialog_ok)) { _, _ -> }
             builder.setView(topicPickerLayout)
 
             val layoutManager = FlexboxLayoutManager(context)
@@ -152,9 +152,9 @@ class AccountActivity : AppCompatActivity() {
                 val topic = topicPickerLayout.topic_input.text.toString()
 
                 if (topic.isBlank()) {
-                    topicPickerLayout.topic_input.error = "Topic cannot be blank"
+                    topicPickerLayout.topic_input.error = getString(R.string.message_topic_blank)
                 } else if (!(topic.all { it.isLetterOrDigit() || it.isWhitespace() })) {
-                    topicPickerLayout.topic_input.error = "Topic must be alphanumeric"
+                    topicPickerLayout.topic_input.error = getString(R.string.message_topic_invalid)
                 } else {
                     isValid = true
                 }

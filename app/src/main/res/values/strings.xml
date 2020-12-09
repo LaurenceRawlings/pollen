@@ -2,9 +2,11 @@
     <string name="app_name">Pollen</string>
 
     <!--    Main Activity    -->
-    <string name="activity_main_tab_title_1">For You</string>
-    <string name="activity_main_tab_title_2">Headlines</string>
+    <string name="activity_main_tab_title_1">Headlines</string>
+    <string name="activity_main_tab_title_2">For You</string>
     <string name="activity_main_tab_title_3">Everything</string>
+    <string name="activity_main_menu_bookmarks">Bookmarks</string>
+    <string name="activity_main_menu_account">Account</string>
 
     <!--    Account Activity    -->
     <string name="activity_account_title">Account Preferences</string>
@@ -12,6 +14,51 @@
     <!--    Bookmarks Activity    -->
     <string name="activity_bookmarks_title">Bookmarks</string>
 
-    <!--    Topics Activity    -->
-    <string name="activity_topics_title">News Topics</string>
+    <!--    Messages    -->
+    <string name="message_bookmark_added">Bookmark added</string>
+    <string name="message_bookmark_removed">Bookmark removed</string>
+    <string name="message_bookmark_sign_in">Sign in to bookmark articles</string>
+    <string name="message_logged_out">Logged out</string>
+    <string name="message_topic_blank">Topic cannot be blank</string>
+    <string name="message_topic_invalid">Topic must be alphanumeric</string>
+    <string name="message_logged_in">Logged in</string>
+    <string name="message_log_in_failed">Log in failed</string>
+
+    <!--    Times    -->
+    <string name="time_now">now</string>
+    <string name="time_days">%dd ago</string>
+    <string name="time_hours">%dh ago</string>
+
+    <!--    Article Dialog    -->
+    <string name="article_dialog_time">• %s</string>
+    <string name="article_dialog_close">Close</string>
+    <string name="article_dialog_read_more">Read more</string>
+
+    <!--    Topics Dialog    -->
+    <string name="topics_dialog_title">Topics</string>
+    <string name="topics_dialog_ok">OK</string>
+
+    <!--    Notifications    -->
+    <string name="notification_title">News Alert</string>
+    <string name="notification_message">You have new stories to check out!</string>
+
+    <!--    Preferences    -->
+    <string name="preferences_key_sources">sources</string>
+    <string name="preferences_key_country">country</string>
+    <string name="preferences_key_language">language</string>
+    <string name="preferences_key_topics">topics</string>
+    <string name="preferences_key_notifications">notifications</string>
+    <string name="preferences_key_notification_interval">notification-interval</string>
+    <string name="preferences_default_notifications">6</string>
+    <string name="preferences_title_country">Country</string>
+    <string name="preferences_default_country">GB</string>
+    <string name="preferences_default_language">EN</string>
+    <string name="preferences_title_language">Language</string>
+    <string name="preferences_title_localisation">Localisation</string>
+    <string name="preferences_title_notifications">Notifications</string>
+    <string name="preferences_title_receive_notifications">Receive Notifications</string>
+    <string name="preferences_title_notification_interval">Alert Interval</string>
+    <string name="preferences_title_news">News</string>
+    <string name="preferences_title_sources">Sources</string>
+    <string name="preferences_title_topics">Topics</string>
 </resources>

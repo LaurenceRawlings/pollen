@@ -10,6 +10,9 @@ import androidx.core.app.NotificationCompat
 import com.laurencerawlings.pollen.R
 import com.laurencerawlings.pollen.api.NewsRepository
 
+private const val NOTIFICATION_ID = "notification_id"
+private const val NOTIFICATION = "notification"
+private const val NOTIFICATION_CHANNEL = "pollen"
 
 class NewsNotification : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -24,10 +27,6 @@ class NewsNotification : BroadcastReceiver() {
     }
 
     companion object {
-        private const val NOTIFICATION_ID = "notification_id"
-        private const val NOTIFICATION = "notification"
-        private const val NOTIFICATION_CHANNEL = "pollen"
-
         fun schedule(context: Context, intentActivity: Activity, delay: Long) {
             val futureInMillis: Long = SystemClock.elapsedRealtime() + delay
 
@@ -43,8 +42,8 @@ class NewsNotification : BroadcastReceiver() {
 
 
             val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL)
-                .setContentTitle("News Alert")
-                .setContentText("You have new stories to check out!")
+                .setContentTitle(context.getString(R.string.notification_title))
+                .setContentText(context.getString(R.string.notification_message))
                 .setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))

@@ -17,8 +17,8 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
 class User(
-    var id: String = "anon",
-    var name: String = "Anonymous"
+    var id: String = "",
+    var name: String = ""
 ) {
     companion object {
         private val db = Firebase.firestore

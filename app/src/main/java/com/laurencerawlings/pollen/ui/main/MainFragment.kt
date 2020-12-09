@@ -14,10 +14,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_main.*
 
+private const val ARG_TAB_NUMBER = "tab_number"
+
 class MainFragment : Fragment() {
     companion object {
-        private const val ARG_TAB_NUMBER = "tab_number"
-
         @JvmStatic
         fun newInstance(sectionNumber: Int): MainFragment {
             return MainFragment().apply {
