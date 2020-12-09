@@ -7,9 +7,13 @@
     <string name="activity_main_tab_title_3">Everything</string>
     <string name="activity_main_menu_bookmarks">Bookmarks</string>
     <string name="activity_main_menu_account">Account</string>
+    <string name="activity_main_add_topics_button">Add Topics</string>
+    <string name="activity_main_add_topics_message">Add personal topics to your list in the settings to populate your custom news feed!</string>
 
     <!--    Account Activity    -->
     <string name="activity_account_title">Account Preferences</string>
+    <string name="activity_account_log_out">Log Out</string>
+    <string name="activity_account_delete">Delete Account</string>
 
     <!--    Bookmarks Activity    -->
     <string name="activity_bookmarks_title">Bookmarks</string>
@@ -37,6 +41,8 @@
     <!--    Topics Dialog    -->
     <string name="topics_dialog_title">Topics</string>
     <string name="topics_dialog_ok">OK</string>
+    <string name="topics_dialog_hint">keyword</string>
+    <string name="topics_dialog_add">+</string>
 
     <!--    Notifications    -->
     <string name="notification_title">News Alert</string>

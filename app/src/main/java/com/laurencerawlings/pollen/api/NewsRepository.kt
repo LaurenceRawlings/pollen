@@ -7,7 +7,7 @@ import com.dfl.newsapi.model.SourcesDto
 import com.laurencerawlings.pollen.model.User
 import io.reactivex.Single
 
-private const val API_KEY = "f4762581da6d4da2b887b83392495fcd"
+private const val API_KEY = "6cc20cb330e849e491466604070b77aa"
 
 class NewsRepository {
     companion object {

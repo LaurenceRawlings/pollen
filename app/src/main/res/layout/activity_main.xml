@@ -12,11 +12,11 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <RelativeLayout
+        <com.google.android.material.circularreveal.CircularRevealRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
                 android:layout_centerVertical="true"
                 android:minHeight="?actionBarSize"
                 app:theme="@style/Theme.MaterialComponents.Dialog" />
-        </RelativeLayout>
+        </com.google.android.material.circularreveal.CircularRevealRelativeLayout>
 
 
         <com.google.android.material.tabs.TabLayout

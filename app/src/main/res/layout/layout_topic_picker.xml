@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.circularreveal.CircularRevealLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <com.google.android.material.circularreveal.CircularRevealLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp">
@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.9"
-            android:hint="keyword"
+            android:hint="@string/topics_dialog_hint"
             android:inputType="text"
             android:selectAllOnFocus="true"
             android:singleLine="true" />
@@ -24,10 +24,10 @@
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            android:text="+"
+            android:text="@string/topics_dialog_add"
             android:textSize="12sp" />
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </com.google.android.material.circularreveal.CircularRevealLinearLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -37,4 +37,4 @@
         android:layout_margin="16dp"
         android:background="@drawable/bg_topics_recycler_view" />
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+</com.google.android.material.circularreveal.CircularRevealLinearLayout>

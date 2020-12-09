@@ -43,7 +43,7 @@ class AccountActivity : AppCompatActivity() {
             .signOut(this)
             .addOnCompleteListener {
                 User.updateUser()
-                Utils.showSnackbar(getString(R.string.message_logged_out), view)
+                Utils.showSnackbar(view.context.getString(R.string.message_logged_out), view)
                 setResult(Activity.RESULT_FIRST_USER)
                 finish()
             }
@@ -65,24 +65,24 @@ class AccountActivity : AppCompatActivity() {
             listener =
                 OnSharedPreferenceChangeListener { preferences, key ->
                     when (key) {
-                        getString(R.string.preferences_key_sources) -> {
+                        context?.getString(R.string.preferences_key_sources) -> {
                             User.user.setSources(
-                                preferences.getStringSet(getString(R.string.preferences_key_sources), null)?.toTypedArray()!!
+                                preferences.getStringSet(context?.getString(R.string.preferences_key_sources), null)?.toTypedArray()!!
                             )
                         }
-                        getString(R.string.preferences_key_country) -> {
+                        context?.getString(R.string.preferences_key_country) -> {
                             User.user.setCountry(
                                 preferences.getString(
-                                    getString(R.string.preferences_key_country),
+                                    context?.getString(R.string.preferences_key_country),
                                     Country.GB.toString()
                                 )!!
                             )
                             updateSources()
                         }
-                        getString(R.string.preferences_key_language) -> {
+                        context?.getString(R.string.preferences_key_language) -> {
                             User.user.setLanguage(
                                 preferences.getString(
-                                    getString(R.string.preferences_key_language),
+                                    context?.getString(R.string.preferences_key_language),
                                     Language.EN.toString()
                                 )!!
                             )
@@ -98,8 +98,10 @@ class AccountActivity : AppCompatActivity() {
                 .registerOnSharedPreferenceChangeListener(listener)
             updateSources()
 
-            findPreference<Preference>(getString(R.string.preferences_key_topics))?.setOnPreferenceClickListener {
-                openTopicPickerDialog()
+            context?.getString(R.string.preferences_key_topics)?.let {
+                findPreference<Preference>(it)?.setOnPreferenceClickListener {
+                    openTopicPickerDialog()
+                }
             }
         }
 
@@ -109,7 +111,12 @@ class AccountActivity : AppCompatActivity() {
                     activity?.runOnUiThread {
                         val sourceNames = ArrayList<String>()
                         val sourceIds = ArrayList<String>()
-                        val sourcesPreference = findPreference<MultiSelectListPreference>(getString(R.string.preferences_key_sources))
+                        val sourcesPreference =
+                            context?.getString(R.string.preferences_key_sources)?.let {
+                                findPreference<MultiSelectListPreference>(
+                                    it
+                                )
+                            }
 
                         sources.sources.map {
                             sourceNames.add(it.name)
@@ -129,8 +136,8 @@ class AccountActivity : AppCompatActivity() {
             val topicPickerLayout: View = inflater.inflate(R.layout.layout_topic_picker, null)
             val builder: AlertDialog.Builder = AlertDialog.Builder(context)
 
-            builder.setTitle(getString(R.string.topics_dialog_title))
-            builder.setPositiveButton(getString(R.string.topics_dialog_ok)) { _, _ -> }
+            builder.setTitle(context?.getString(R.string.topics_dialog_title))
+            builder.setPositiveButton(context?.getString(R.string.topics_dialog_ok)) { _, _ -> }
             builder.setView(topicPickerLayout)
 
             val layoutManager = FlexboxLayoutManager(context)
@@ -152,9 +159,9 @@ class AccountActivity : AppCompatActivity() {
                 val topic = topicPickerLayout.topic_input.text.toString()
 
                 if (topic.isBlank()) {
-                    topicPickerLayout.topic_input.error = getString(R.string.message_topic_blank)
+                    topicPickerLayout.topic_input.error = context?.getString(R.string.message_topic_blank)
                 } else if (!(topic.all { it.isLetterOrDigit() || it.isWhitespace() })) {
-                    topicPickerLayout.topic_input.error = getString(R.string.message_topic_invalid)
+                    topicPickerLayout.topic_input.error = context?.getString(R.string.message_topic_invalid)
                 } else {
                     isValid = true
                 }
