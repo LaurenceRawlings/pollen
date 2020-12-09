@@ -17,7 +17,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/activity_margin"
             android:text="@string/activity_main_add_topics_message"
             android:textAlignment="center"
             android:textSize="24sp" />

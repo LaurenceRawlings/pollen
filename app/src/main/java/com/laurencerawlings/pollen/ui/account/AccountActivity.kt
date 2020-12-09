@@ -67,7 +67,10 @@ class AccountActivity : AppCompatActivity() {
                     when (key) {
                         context?.getString(R.string.preferences_key_sources) -> {
                             User.user.setSources(
-                                preferences.getStringSet(context?.getString(R.string.preferences_key_sources), null)?.toTypedArray()!!
+                                preferences.getStringSet(
+                                    context?.getString(R.string.preferences_key_sources),
+                                    null
+                                )?.toTypedArray()!!
                             )
                         }
                         context?.getString(R.string.preferences_key_country) -> {
@@ -159,9 +162,11 @@ class AccountActivity : AppCompatActivity() {
                 val topic = topicPickerLayout.topic_input.text.toString()
 
                 if (topic.isBlank()) {
-                    topicPickerLayout.topic_input.error = context?.getString(R.string.message_topic_blank)
+                    topicPickerLayout.topic_input.error =
+                        context?.getString(R.string.message_topic_blank)
                 } else if (!(topic.all { it.isLetterOrDigit() || it.isWhitespace() })) {
-                    topicPickerLayout.topic_input.error = context?.getString(R.string.message_topic_invalid)
+                    topicPickerLayout.topic_input.error =
+                        context?.getString(R.string.message_topic_invalid)
                 } else {
                     isValid = true
                 }

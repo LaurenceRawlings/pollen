@@ -19,8 +19,6 @@ import com.laurencerawlings.pollen.ui.Utils
 import com.laurencerawlings.pollen.ui.main.MainActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.layout_article_card.view.*
-import kotlinx.android.synthetic.main.layout_article_card.view.article_card_title
-import kotlinx.android.synthetic.main.layout_article_card.view.article_card_image
 import kotlinx.android.synthetic.main.layout_article_popup.view.*
 import kotlinx.android.synthetic.main.layout_article_source.view.*
 import java.net.URL
@@ -78,13 +76,22 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) :
                 if (User.isAuthed()) {
                     if (bookmarked.isChecked) {
                         User.user.addBookmark(article)
-                        Utils.showSnackbar(itemView.context.getString(R.string.message_bookmark_added), it)
+                        Utils.showSnackbar(
+                            itemView.context.getString(R.string.message_bookmark_added),
+                            it
+                        )
                     } else {
                         User.user.removeBookmark(article)
-                        Utils.showSnackbar(itemView.context.getString(R.string.message_bookmark_removed), it)
+                        Utils.showSnackbar(
+                            itemView.context.getString(R.string.message_bookmark_removed),
+                            it
+                        )
                     }
                 } else {
-                    Utils.showSnackbar(itemView.context.getString(R.string.message_bookmark_sign_in), it)
+                    Utils.showSnackbar(
+                        itemView.context.getString(R.string.message_bookmark_sign_in),
+                        it
+                    )
                     bookmarked.isChecked = false
                 }
 
@@ -151,9 +158,12 @@ class ArticleRecyclerAdapter(articles: List<ArticleDto>) :
                 }
 
                 articleLayout.article_source.text = MainActivity.currentArticle!!.source.name
-                articleLayout.article_popup_time.text = context.getString(R.string.article_dialog_time).format(timeString(MainActivity.currentArticle!!.publishedAt))
+                articleLayout.article_popup_time.text =
+                    context.getString(R.string.article_dialog_time)
+                        .format(timeString(MainActivity.currentArticle!!.publishedAt))
                 articleLayout.article_popup_title.text = MainActivity.currentArticle!!.title
-                articleLayout.article_popup_description.text = MainActivity.currentArticle!!.description
+                articleLayout.article_popup_description.text =
+                    MainActivity.currentArticle!!.description
             }
 
             builder.setPositiveButton(context.getString(R.string.article_dialog_close)) { _, _ -> }

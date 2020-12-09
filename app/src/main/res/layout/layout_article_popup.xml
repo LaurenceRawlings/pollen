@@ -37,7 +37,7 @@
             android:id="@+id/article_popup_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="@dimen/activity_margin"
             android:textColor="@color/colorOnPrimary"
             android:textSize="20sp" />
 

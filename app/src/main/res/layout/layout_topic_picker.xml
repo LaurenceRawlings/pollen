@@ -7,7 +7,7 @@
     <com.google.android.material.circularreveal.CircularRevealLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp">
+        android:layout_margin="@dimen/activity_margin">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/topic_input"
@@ -34,7 +34,7 @@
         android:id="@+id/topics"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/activity_margin"
         android:background="@drawable/bg_topics_recycler_view" />
 
 </com.google.android.material.circularreveal.CircularRevealLinearLayout>
