@@ -30,7 +30,7 @@
             android:entries="@array/notificationIntervals"
             android:entryValues="@array/notificationIntervalValues"
             android:title="@string/preferences_title_notification_interval"
-            app:defaultValue="@string/preferences_key_notification_interval"
+            app:defaultValue="@string/preferences_default_notifications"
             app:key="@string/preferences_key_notification_interval"
             app:useSimpleSummaryProvider="true" />
 

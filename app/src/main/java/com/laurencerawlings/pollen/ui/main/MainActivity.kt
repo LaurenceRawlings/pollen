@@ -174,10 +174,7 @@ class MainActivity : AppCompatActivity() {
 
         if (localPreferences.getBoolean(getString(R.string.preferences_key_notifications), true)) {
             val delayHours = localPreferences.getString(
-                getString(R.string.preferences_key_notification_interval), getString(
-                    R.string.preferences_default_notifications
-                )
-            )!!.toLong()
+                getString(R.string.preferences_key_notification_interval), "6")!!.toLong()
             val delayMilliseconds = delayHours.times(3600000)
 
             val calendar = Calendar.getInstance()
